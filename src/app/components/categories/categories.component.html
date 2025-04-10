@@ -1,0 +1,110 @@
+<div class="categories">
+  <div class="categories__header">
+    <div class="categories__title-wrapper">
+      <h1 class="categories__title">Categories Management</h1>
+      <p class="categories__subtitle">Manage your product categories</p>
+    </div>
+    <button class="categories__btn categories__btn--primary" (click)="openAddModal()">
+      <i class="fa fa-plus"></i> Add New Category
+    </button>
+  </div>
+
+  <div class="categories__search-bar">
+    <div class="categories__search">
+      <input 
+        type="text" 
+        class="categories__search-input" 
+        placeholder="Search categories..." 
+        [(ngModel)]="searchQuery"
+        (input)="searchCategories()">
+      <button class="categories__search-btn">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+    <div class="categories__filter">
+      <select class="categories__filter-select">
+        <option value="all">All Categories</option>
+        <option value="active">Active Only</option>
+        <option value="inactive">Inactive Only</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="categories__table-wrapper">
+    <table class="categories__table">
+      <thead class="categories__table-head">
+        <tr>
+          <th class="categories__table-heading">ID</th>
+          <th class="categories__table-heading">Category Name</th>
+          <th class="categories__table-heading">Description</th>
+          <th class="categories__table-heading">Products</th>
+          <th class="categories__table-heading">Status</th>
+          <th class="categories__table-heading">Created Date</th>
+          <th class="categories__table-heading">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="categories__table-body">
+        <tr *ngFor="let category of filteredCategories" class="categories__table-row">
+          <td class="categories__table-cell">{{ category.id }}</td>
+          <td class="categories__table-cell categories__table-cell--name">{{ category.name }}</td>
+          <td class="categories__table-cell categories__table-cell--description">{{ category.description }}</td>
+          <td class="categories__table-cell">{{ category.products }}</td>
+          <td class="categories__table-cell">
+            <span 
+              class="categories__badge" 
+              [ngClass]="{'categories__badge--active': category.status === 'active', 'categories__badge--inactive': category.status === 'inactive'}"
+              (click)="toggleStatus(category)">
+              {{ category.status | titlecase }}
+            </span>
+          </td>
+          <td class="categories__table-cell">{{ category.createdAt }}</td>
+          <td class="categories__table-cell categories__table-cell--actions">
+            <button class="categories__action-btn categories__action-btn--edit" (click)="openEditModal(category)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="categories__action-btn categories__action-btn--delete" (click)="deleteCategory(category.id)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredCategories.length === 0" class="categories__table-row">
+          <td class="categories__table-cell" colspan="7" style="text-align: center;">
+            No categories found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Simple Form for Add/Edit (in a real app this would be a modal dialog) -->
+  <div class="categories__form-container" *ngIf="isEditMode || categoryForm.id === 0">
+    <div class="categories__form">
+      <h2 class="categories__form-title">{{ isEditMode ? 'Edit Category' : 'Add New Category' }}</h2>
+      
+      <div class="categories__form-group">
+        <label class="categories__form-label">Category Name</label>
+        <input type="text" class="categories__form-input" [(ngModel)]="categoryForm.name" required>
+      </div>
+      
+      <div class="categories__form-group">
+        <label class="categories__form-label">Description</label>
+        <textarea class="categories__form-textarea" [(ngModel)]="categoryForm.description" rows="3"></textarea>
+      </div>
+      
+      <div class="categories__form-group">
+        <label class="categories__form-label">Status</label>
+        <select class="categories__form-select" [(ngModel)]="categoryForm.status">
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
+      
+      <div class="categories__form-actions">
+        <button class="categories__btn categories__btn--secondary" (click)="resetForm()">Cancel</button>
+        <button class="categories__btn categories__btn--primary" (click)="saveCategory()">
+          {{ isEditMode ? 'Update' : 'Save' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div> 

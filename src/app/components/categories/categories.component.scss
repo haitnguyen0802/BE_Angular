@@ -1,0 +1,391 @@
+// Sử dụng các biến giống với dashboard để đảm bảo tính nhất quán
+$primary-color: #4e73df;
+$success-color: #1cc88a;
+$warning-color: #f6c23e;
+$danger-color: #e74a3b;
+$dark-color: #5a5c69;
+$light-color: #f8f9fc;
+$grey-color: #e3e6f0;
+$text-color: #333;
+$border-radius: 5px;
+$transition-speed: 0.3s;
+$box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+
+// Mixins for responsive design
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == "sm" {
+    @media (max-width: 576px) { @content; }
+  }
+  @else if $breakpoint == "md" {
+    @media (max-width: 768px) { @content; }
+  }
+  @else if $breakpoint == "lg" {
+    @media (max-width: 992px) { @content; }
+  }
+  @else if $breakpoint == "xl" {
+    @media (max-width: 1200px) { @content; }
+  }
+}
+
+// Categories container
+.categories {
+  background-color: $light-color;
+  padding: 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  
+  @include respond-to('md') {
+    padding: 15px;
+    gap: 15px;
+  }
+}
+
+// Header
+.categories__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  
+  @include respond-to('md') {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+
+.categories__title-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.categories__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $dark-color;
+  margin: 0;
+}
+
+.categories__subtitle {
+  font-size: 0.9rem;
+  color: lighten($dark-color, 20%);
+  margin: 5px 0 0;
+}
+
+// Buttons
+.categories__btn {
+  padding: 10px 15px;
+  border-radius: $border-radius;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all $transition-speed;
+  
+  &--primary {
+    background-color: $primary-color;
+    color: white;
+    border: none;
+    
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+  
+  &--secondary {
+    background-color: #f8f9fc;
+    color: $dark-color;
+    border: 1px solid $grey-color;
+    
+    &:hover {
+      background-color: darken(#f8f9fc, 5%);
+    }
+  }
+  
+  @include respond-to('md') {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+// Search bar
+.categories__search-bar {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 10px;
+  
+  @include respond-to('md') {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.categories__search {
+  position: relative;
+  flex: 1;
+}
+
+.categories__search-input {
+  width: 100%;
+  padding: 10px 15px;
+  padding-right: 40px;
+  border-radius: 30px;
+  border: 1px solid $grey-color;
+  outline: none;
+  font-size: 0.9rem;
+  
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+  }
+}
+
+.categories__search-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $dark-color;
+  cursor: pointer;
+}
+
+.categories__filter {
+  width: 200px;
+  
+  @include respond-to('md') {
+    width: 100%;
+  }
+}
+
+.categories__filter-select {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: $border-radius;
+  border: 1px solid $grey-color;
+  outline: none;
+  background-color: white;
+  cursor: pointer;
+  
+  &:focus {
+    border-color: $primary-color;
+  }
+}
+
+// Table
+.categories__table-wrapper {
+  overflow-x: auto;
+  background-color: white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  flex: 1;
+}
+
+.categories__table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.categories__table-head {
+  background-color: $light-color;
+  border-bottom: 2px solid $grey-color;
+}
+
+.categories__table-heading {
+  text-align: left;
+  padding: 12px 15px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: $dark-color;
+}
+
+.categories__table-row {
+  border-bottom: 1px solid $grey-color;
+  transition: background-color $transition-speed;
+  
+  &:hover {
+    background-color: rgba($light-color, 0.7);
+  }
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.categories__table-cell {
+  padding: 12px 15px;
+  font-size: 0.9rem;
+  
+  &--name {
+    font-weight: 600;
+  }
+  
+  &--description {
+    max-width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  &--actions {
+    width: 100px;
+    text-align: center;
+  }
+}
+
+// Badge
+.categories__badge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 30px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all $transition-speed;
+  
+  &--active {
+    background-color: rgba($success-color, 0.15);
+    color: $success-color;
+    
+    &:hover {
+      background-color: rgba($success-color, 0.25);
+    }
+  }
+  
+  &--inactive {
+    background-color: rgba($danger-color, 0.15);
+    color: $danger-color;
+    
+    &:hover {
+      background-color: rgba($danger-color, 0.25);
+    }
+  }
+}
+
+// Action buttons
+.categories__action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 3px;
+  cursor: pointer;
+  transition: all $transition-speed;
+  
+  &--edit {
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
+    
+    &:hover {
+      background-color: $primary-color;
+      color: white;
+    }
+  }
+  
+  &--delete {
+    background-color: rgba($danger-color, 0.1);
+    color: $danger-color;
+    
+    &:hover {
+      background-color: $danger-color;
+      color: white;
+    }
+  }
+}
+
+// Form
+.categories__form-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.categories__form {
+  width: 100%;
+  max-width: 500px;
+  background-color: white;
+  border-radius: $border-radius;
+  padding: 25px;
+  box-shadow: $box-shadow;
+}
+
+.categories__form-title {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: $dark-color;
+  font-weight: 700;
+}
+
+.categories__form-group {
+  margin-bottom: 20px;
+}
+
+.categories__form-label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $dark-color;
+}
+
+.categories__form-input,
+.categories__form-textarea,
+.categories__form-select {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: $border-radius;
+  border: 1px solid $grey-color;
+  outline: none;
+  font-size: 0.9rem;
+  
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+  }
+}
+
+.categories__form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.categories__form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
+  
+  @include respond-to('md') {
+    flex-direction: column-reverse;
+    gap: 15px;
+    
+    button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+} 

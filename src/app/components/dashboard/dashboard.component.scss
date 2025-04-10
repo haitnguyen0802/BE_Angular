@@ -1,0 +1,632 @@
+// Variables
+$primary-color: #4e73df;
+$success-color: #1cc88a;
+$warning-color: #f6c23e;
+$danger-color: #e74a3b;
+$dark-color: #5a5c69;
+$light-color: #f8f9fc;
+$grey-color: #e3e6f0;
+$text-color: #333;
+$sidebar-width: 250px;
+$header-height: 70px;
+$border-radius: 5px;
+$transition-speed: 0.3s;
+$box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+
+// Mixins for responsive design
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == "sm" {
+    @media (max-width: 576px) { @content; }
+  }
+  @else if $breakpoint == "md" {
+    @media (max-width: 768px) { @content; }
+  }
+  @else if $breakpoint == "lg" {
+    @media (max-width: 992px) { @content; }
+  }
+  @else if $breakpoint == "xl" {
+    @media (max-width: 1200px) { @content; }
+  }
+}
+
+// Base dashboard styles
+.dashboard {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: $light-color;
+  font-family: 'Nunito', sans-serif;
+  overflow: hidden;
+  color: $text-color;
+
+  @include respond-to('lg') {
+    flex-direction: column;
+  }
+}
+
+// Sidebar styles
+.dashboard__sidebar {
+  width: $sidebar-width;
+  height: 100%;
+  background: linear-gradient(180deg, $primary-color 0%, darken($primary-color, 15%) 100%);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  transition: all $transition-speed;
+  overflow-y: auto;
+  z-index: 100;
+
+  @include respond-to('lg') {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+
+  @include respond-to('md') {
+    padding: 0.5rem;
+  }
+}
+
+// Logo styles
+.dashboard__logo {
+  padding: 1rem 0;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+
+  @include respond-to('md') {
+    margin-bottom: 1rem;
+  }
+}
+
+.dashboard__logo-img {
+  max-width: 150px;
+  height: auto;
+}
+
+// Navigation styles
+.dashboard__nav {
+  flex: 1;
+}
+
+.dashboard__nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard__nav-item {
+  margin-bottom: 0.5rem;
+
+  &--active {
+    .dashboard__nav-link {
+      background-color: rgba(255, 255, 255, 0.2);
+      border-left: 4px solid white;
+    }
+  }
+}
+
+.dashboard__nav-link {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  border-radius: $border-radius;
+  transition: all $transition-speed;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+  }
+}
+
+.dashboard__nav-icon {
+  width: 20px;
+  text-align: center;
+  margin-right: 0.75rem;
+}
+
+.dashboard__nav-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+// User profile section
+.dashboard__user {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto;
+
+  @include respond-to('lg') {
+    display: none;
+  }
+}
+
+.dashboard__user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 0.75rem;
+}
+
+.dashboard__user-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dashboard__user-info {
+  flex: 1;
+}
+
+.dashboard__user-name {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.dashboard__user-role {
+  margin: 0;
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+// Main content area
+.dashboard__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 1.5rem;
+  
+  @include respond-to('md') {
+    padding: 1rem 0.5rem;
+  }
+}
+
+// Header styles
+.dashboard__header {
+  height: $header-height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  
+  @include respond-to('md') {
+    height: auto;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+// Search section
+.dashboard__search {
+  position: relative;
+  width: 300px;
+  
+  @include respond-to('md') {
+    width: 100%;
+  }
+}
+
+.dashboard__search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  padding-right: 3rem;
+  border-radius: 30px;
+  border: 1px solid $grey-color;
+  background-color: white;
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color $transition-speed, box-shadow $transition-speed;
+  
+  &:focus {
+    border-color: $primary-color;
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+  }
+}
+
+.dashboard__search-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  color: $dark-color;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background-color: rgba($primary-color, 0.1);
+    color: $primary-color;
+  }
+}
+
+// Action buttons
+.dashboard__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dashboard__action-btn {
+  background: transparent;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $dark-color;
+  font-size: 1.2rem;
+  position: relative;
+  cursor: pointer;
+  transition: all $transition-speed;
+  
+  &:hover {
+    background-color: rgba($dark-color, 0.1);
+  }
+}
+
+.dashboard__notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: $danger-color;
+  color: white;
+  font-size: 0.7rem;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Overview cards
+.dashboard__overview {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  
+  @include respond-to('xl') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include respond-to('md') {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.dashboard__card {
+  background-color: white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  transition: transform $transition-speed;
+  border-left: 4px solid transparent;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+  
+  &--primary {
+    border-left-color: $primary-color;
+    .dashboard__card-icon {
+      color: $primary-color;
+    }
+  }
+  
+  &--success {
+    border-left-color: $success-color;
+    .dashboard__card-icon {
+      color: $success-color;
+    }
+  }
+  
+  &--warning {
+    border-left-color: $warning-color;
+    .dashboard__card-icon {
+      color: $warning-color;
+    }
+  }
+  
+  &--danger {
+    border-left-color: $danger-color;
+    .dashboard__card-icon {
+      color: $danger-color;
+    }
+  }
+}
+
+.dashboard__card-icon {
+  font-size: 2rem;
+  margin-right: 1rem;
+  
+  @include respond-to('md') {
+    font-size: 1.5rem;
+  }
+}
+
+.dashboard__card-content {
+  flex: 1;
+}
+
+.dashboard__card-title {
+  margin: 0;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: darken($dark-color, 15%);
+}
+
+.dashboard__card-value {
+  margin: 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  
+  @include respond-to('md') {
+    font-size: 1.25rem;
+  }
+}
+
+.dashboard__card-change {
+  margin: 0;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  
+  &--up {
+    color: $success-color;
+  }
+  
+  &--down {
+    color: $danger-color;
+  }
+}
+
+// Content section
+.dashboard__content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  
+  @include respond-to('lg') {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Chart container
+.dashboard__chart-container {
+  background-color: white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  padding: 1.25rem;
+  
+  @include respond-to('md') {
+    padding: 1rem;
+  }
+}
+
+.dashboard__chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  
+  @include respond-to('md') {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+.dashboard__chart-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.dashboard__chart-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dashboard__chart-btn {
+  background-color: transparent;
+  border: 1px solid $grey-color;
+  border-radius: $border-radius;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all $transition-speed;
+  
+  &:hover {
+    background-color: $light-color;
+  }
+  
+  &--active {
+    background-color: $primary-color;
+    color: white;
+    border-color: $primary-color;
+    
+    &:hover {
+      background-color: darken($primary-color, 5%);
+    }
+  }
+}
+
+.dashboard__chart {
+  width: 100%;
+  height: 300px;
+  
+  @include respond-to('md') {
+    height: 250px;
+  }
+}
+
+.dashboard__chart-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $dark-color;
+  background-color: rgba($grey-color, 0.3);
+  border-radius: $border-radius;
+  font-size: 0.9rem;
+}
+
+// Table container
+.dashboard__table-container {
+  background-color: white;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  padding: 1.25rem;
+  
+  @include respond-to('md') {
+    padding: 1rem;
+  }
+}
+
+.dashboard__table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  
+  @include respond-to('md') {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+
+.dashboard__table-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.dashboard__table-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  color: $primary-color;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.85rem;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.dashboard__table-wrapper {
+  overflow-x: auto;
+}
+
+.dashboard__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.dashboard__table-head {
+  border-bottom: 2px solid $grey-color;
+}
+
+.dashboard__table-heading {
+  text-align: left;
+  padding: 0.75rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: darken($dark-color, 15%);
+}
+
+.dashboard__table-body {
+  .dashboard__table-row {
+    &:not(:last-child) {
+      border-bottom: 1px solid $grey-color;
+    }
+    
+    &:hover {
+      background-color: $light-color;
+    }
+  }
+}
+
+.dashboard__table-cell {
+  padding: 0.75rem;
+  font-size: 0.9rem;
+}
+
+// Status badges
+.dashboard__badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  
+  &--success {
+    background-color: rgba($success-color, 0.15);
+    color: $success-color;
+  }
+  
+  &--pending {
+    background-color: rgba($warning-color, 0.15);
+    color: $warning-color;
+  }
+  
+  &--cancelled {
+    background-color: rgba($danger-color, 0.15);
+    color: $danger-color;
+  }
+}
+
+// Responsive tweaks 
+@include respond-to('lg') {
+  .dashboard {
+    height: auto;
+    min-height: 100vh;
+  }
+}
+
+@include respond-to('sm') {
+  .dashboard__overview {
+    margin-top: 1rem;
+  }
+  
+  .dashboard__table-cell {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .dashboard__card {
+    padding: 1rem;
+  }
+}
