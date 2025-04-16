@@ -31,6 +31,14 @@
             <span class="dashboard__nav-text">Products</span>
           </a>
         </li>
+        <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'orders'}">
+          <a (click)="changeTab('orders')" class="dashboard__nav-link">
+            <span class="dashboard__nav-icon">
+              <i class="fa fa-shopping-bag"></i>
+            </span>
+            <span class="dashboard__nav-text">Orders</span>
+          </a>
+        </li>
         <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'customers'}">
           <a (click)="changeTab('customers')" class="dashboard__nav-link">
             <span class="dashboard__nav-icon">
@@ -142,7 +150,7 @@
         <section class="dashboard__table-container">
           <div class="dashboard__table-header">
             <h2 class="dashboard__table-title">Recent Orders</h2>
-            <button class="dashboard__table-btn">
+            <button class="dashboard__table-btn" (click)="changeTab('orders')">
               View All <i class="fa fa-arrow-right"></i>
             </button>
           </div>
@@ -166,11 +174,11 @@
                   <td class="dashboard__table-cell">
                     <span class="dashboard__badge" 
                           [ngClass]="{
-                            'dashboard__badge--success': order.status === 'completed',
-                            'dashboard__badge--pending': order.status === 'pending',
-                            'dashboard__badge--cancelled': order.status === 'cancelled'
+                            'dashboard__badge--success': order.status === 2,
+                            'dashboard__badge--pending': order.status === 1,
+                            'dashboard__badge--cancelled': order.status === 0
                           }">
-                      {{ order.status | titlecase }}
+                      {{ order.status === 0 ? 'Thất bại/Hủy' : order.status === 1 ? 'Đang chờ' : 'Thành công' }}
                     </span>
                   </td>
                 </tr>
@@ -199,6 +207,11 @@
     <!-- Customers Tab -->
     <div *ngIf="activeTab === 'customers'">
       <app-customers></app-customers>
+    </div>
+
+    <!-- Orders Tab -->
+    <div *ngIf="activeTab === 'orders'">
+      <app-orders></app-orders>
     </div>
   </main>
 </div>

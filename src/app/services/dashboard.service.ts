@@ -26,7 +26,7 @@ export interface Order {
   customer: string;
   date: string;
   amount: string;
-  status: 'completed' | 'pending' | 'cancelled';
+  status: number; // 0: Thất bại/Hủy, 1: Đang chờ, 2: Thành công
 }
 
 @Injectable({
@@ -45,28 +45,28 @@ export class DashboardService {
     // Example: return this.apiService.get<CardData[]>('dashboard/cards');
     return of([
       {
-        title: 'Total Users',
-        value: '1,452',
+        title: 'Tổng đơn hàng',
+        value: '5',
         change: 12.5,
-        icon: 'fa-users'
-      },
-      {
-        title: 'Total Sales',
-        value: '$24,500',
-        change: 8.2,
         icon: 'fa-shopping-bag'
       },
       {
-        title: 'Revenue',
-        value: '$18,260',
+        title: 'Đơn hàng thành công',
+        value: '3',
+        change: 8.2,
+        icon: 'fa-check-circle'
+      },
+      {
+        title: 'Doanh thu',
+        value: '$951.50',
         change: 5.3,
         icon: 'fa-chart-line'
       },
       {
-        title: 'Tickets',
-        value: '42',
+        title: 'Đơn hàng đang chờ',
+        value: '1',
         change: -3.8,
-        icon: 'fa-ticket-alt'
+        icon: 'fa-clock'
       }
     ]);
   }
@@ -85,23 +85,23 @@ export class DashboardService {
     
     switch (period) {
       case 'week':
-        labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        data = [2100, 3200, 2800, 4300, 2900, 3500, 3800];
+        labels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+        data = [120, 245.5, 190.25, 85, 310.75, 0, 0];
         break;
       case 'month':
-        labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
-        data = [12500, 15800, 14200, 18500];
+        labels = ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'];
+        data = [350.5, 401, 200, 0];
         break;
       case 'year':
-        labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        data = [25000, 32000, 28000, 43000, 38000, 32500, 36000, 48000, 42000, 49000, 53000, 58000];
+        labels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+        data = [0, 0, 951.5, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         break;
     }
     
     return of({
       labels,
       datasets: [{
-        label: 'Revenue',
+        label: 'Doanh thu',
         data,
         backgroundColor: 'rgba(78, 115, 223, 0.1)',
         borderColor: '#4e73df',
@@ -120,38 +120,38 @@ export class DashboardService {
     return of([
       {
         id: '#ORD-001',
-        customer: 'John Smith',
-        date: '24 Apr, 2023',
+        customer: 'Nguyễn Văn A',
+        date: '31 Mar, 2025',
         amount: '$120.00',
-        status: 'completed'
+        status: 2 // Thành công
       },
       {
         id: '#ORD-002',
         customer: 'Sarah Johnson',
         date: '23 Apr, 2023',
         amount: '$245.50',
-        status: 'pending'
+        status: 1 // Đang chờ
       },
       {
         id: '#ORD-003',
         customer: 'Michael Brown',
         date: '22 Apr, 2023',
         amount: '$190.25',
-        status: 'completed'
+        status: 2 // Thành công
       },
       {
         id: '#ORD-004',
         customer: 'Emma Wilson',
         date: '21 Apr, 2023',
         amount: '$85.00',
-        status: 'cancelled'
+        status: 0 // Thất bại/Hủy
       },
       {
         id: '#ORD-005',
         customer: 'David Lee',
         date: '20 Apr, 2023',
         amount: '$310.75',
-        status: 'completed'
+        status: 2 // Thành công
       }
     ]);
   }

@@ -1,0 +1,188 @@
+<div class="orders-container">
+  <!-- Notification Banner -->
+  <div *ngIf="showNotification" class="notification" [ngClass]="notificationType">
+    <span>{{ notificationMessage }}</span>
+    <button class="notification-close" (click)="showNotification = false">×</button>
+  </div>
+
+  <header class="orders-header">
+    <h1 class="orders-title">Orders Management</h1>
+    <button class="orders-add-btn" (click)="openAddModal()">
+      <i class="fa fa-plus"></i> Add New Order
+    </button>
+  </header>
+
+  <!-- Search & Filter Section -->
+  <div class="orders-search-section">
+    <div class="orders-search-container">
+      <input 
+        type="text" 
+        class="orders-search-input" 
+        placeholder="Search orders..." 
+        [(ngModel)]="searchQuery"
+        (input)="searchOrders()"
+      >
+      <button class="orders-search-btn" (click)="searchOrders()">
+        <i class="fa fa-search"></i>
+      </button>
+      <button class="orders-reset-btn" *ngIf="searchQuery" (click)="resetSearch()">
+        <i class="fa fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading" class="orders-loading">
+    <div class="spinner"></div>
+    <p>Loading orders...</p>
+  </div>
+
+  <!-- Orders Table -->
+  <div class="orders-table-container" *ngIf="!loading">
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Customer Name</th>
+          <th>Product ID</th>
+          <th>Quantity</th>
+          <th>Order Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders">
+          <td>{{ order.id }}</td>
+          <td>{{ order.customer_name }}</td>
+          <td>{{ order.product_id }}</td>
+          <td>{{ order.quantity }}</td>
+          <td>{{ order.order_date | date:'mediumDate' }}</td>
+          <td>
+            <span class="order-status" 
+                  [ngClass]="{
+                    'order-status-failed': order.status === 0,
+                    'order-status-pending': order.status === 1,
+                    'order-status-completed': order.status === 2
+                  }">
+              {{ order.status === 0 ? 'Thất bại/Hủy' : order.status === 1 ? 'Đang chờ' : 'Thành công' }}
+            </span>
+          </td>
+          <td class="orders-actions">
+            <button class="orders-edit-btn" (click)="openEditModal(order)" [disabled]="processingAction">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="orders-delete-btn" (click)="deleteOrder(order)" [disabled]="processingAction">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredOrders.length === 0">
+          <td colspan="7" class="orders-empty">
+            <p>No orders found. Try adjusting your search or add a new order.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Order Modal (Add/Edit) -->
+  <div class="orders-modal" *ngIf="showModal">
+    <div class="orders-modal-content">
+      <div class="orders-modal-header">
+        <h2>{{ modalTitle }}</h2>
+        <button class="orders-modal-close" (click)="closeModal()">×</button>
+      </div>
+      <div class="orders-modal-body">
+        <form [formGroup]="orderForm" (ngSubmit)="saveOrder()">
+          <!-- Customer Name Field -->
+          <div class="form-group">
+            <label for="customer_name">Customer Name</label>
+            <input 
+              type="text" 
+              id="customer_name" 
+              formControlName="customer_name" 
+              class="form-control"
+              [ngClass]="{'is-invalid': orderForm.get('customer_name')?.touched && orderForm.get('customer_name')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="orderForm.get('customer_name')?.touched && orderForm.get('customer_name')?.invalid">
+              Customer name is required
+            </div>
+          </div>
+
+          <!-- Product ID Field -->
+          <div class="form-group">
+            <label for="product_id">Product ID</label>
+            <input 
+              type="number" 
+              id="product_id" 
+              formControlName="product_id" 
+              class="form-control"
+              [ngClass]="{'is-invalid': orderForm.get('product_id')?.touched && orderForm.get('product_id')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="orderForm.get('product_id')?.touched && orderForm.get('product_id')?.invalid">
+              Product ID is required
+            </div>
+          </div>
+
+          <!-- Quantity Field -->
+          <div class="form-group">
+            <label for="quantity">Quantity</label>
+            <input 
+              type="number" 
+              id="quantity" 
+              formControlName="quantity" 
+              class="form-control"
+              [ngClass]="{'is-invalid': orderForm.get('quantity')?.touched && orderForm.get('quantity')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="orderForm.get('quantity')?.touched && orderForm.get('quantity')?.invalid">
+              Quantity must be at least 1
+            </div>
+          </div>
+
+          <!-- Order Date Field -->
+          <div class="form-group">
+            <label for="order_date">Order Date</label>
+            <input 
+              type="date" 
+              id="order_date" 
+              formControlName="order_date" 
+              class="form-control"
+              [ngClass]="{'is-invalid': orderForm.get('order_date')?.touched && orderForm.get('order_date')?.invalid}"
+            >
+            <div class="invalid-feedback" *ngIf="orderForm.get('order_date')?.touched && orderForm.get('order_date')?.invalid">
+              Order date is required
+            </div>
+          </div>
+
+          <!-- Status Field -->
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select 
+              id="status" 
+              formControlName="status" 
+              class="form-control"
+              [ngClass]="{'is-invalid': orderForm.get('status')?.touched && orderForm.get('status')?.invalid}"
+            >
+              <option *ngFor="let option of statusOptions" [value]="option.value">
+                {{ option.label }}
+              </option>
+            </select>
+            <div class="invalid-feedback" *ngIf="orderForm.get('status')?.touched && orderForm.get('status')?.invalid">
+              Status is required
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="processingAction">Cancel</button>
+            <button type="submit" class="btn btn-primary" [disabled]="processingAction || orderForm.invalid">
+              <span *ngIf="processingAction" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              {{ currentOrderId ? 'Update' : 'Create' }} Order
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> 

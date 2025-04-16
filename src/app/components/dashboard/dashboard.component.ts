@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductsComponent } from '../products/products.component';
 import { CategoriesComponent } from '../categories/categories.component';
 import { CustomersComponent } from '../customers/customers.component';
+import { OrdersComponent } from '../orders/orders.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,7 +19,8 @@ import { CustomersComponent } from '../customers/customers.component';
     FormsModule, 
     ProductsComponent, 
     CategoriesComponent,
-    CustomersComponent
+    CustomersComponent,
+    OrdersComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
