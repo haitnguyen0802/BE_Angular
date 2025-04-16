@@ -1,0 +1,153 @@
+<!-- Customers Content -->
+<div class="dashboard__content">
+  <!-- Loading Overlay -->
+  <div class="customers__loading-overlay" *ngIf="isLoading">
+    <div class="customers__loading-spinner">
+      <i class="fa fa-spinner fa-spin"></i>
+      <span>Loading...</span>
+    </div>
+  </div>
+
+  <div class="customers__header">
+    <div class="customers__title-wrapper">
+      <h1 class="customers__title">Customers Management</h1>
+      <p class="customers__subtitle">Manage your customers</p>
+    </div>
+    <button class="customers__btn customers__btn--primary" (click)="openAddModal()">
+      <i class="fa fa-plus"></i> Add New Customer
+    </button>
+  </div>
+
+  <div class="customers__search-bar">
+    <div class="customers__search">
+      <input 
+        type="text" 
+        class="customers__search-input" 
+        placeholder="Search customers by name, email or phone..." 
+        [(ngModel)]="searchQuery"
+        (input)="searchCustomers()">
+      <button class="customers__search-btn">
+        <i class="fa fa-search"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="customers__table-wrapper">
+    <table class="customers__table">
+      <thead class="customers__table-head">
+        <tr>
+          <th class="customers__table-heading">ID</th>
+          <th class="customers__table-heading">Full Name</th>
+          <th class="customers__table-heading">Username</th>
+          <th class="customers__table-heading">Email</th>
+          <th class="customers__table-heading">Phone</th>
+          <th class="customers__table-heading">Gender</th>
+          <th class="customers__table-heading">Date of Birth</th>
+          <th class="customers__table-heading">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="customers__table-body">
+        <tr *ngFor="let customer of filteredCustomers" class="customers__table-row">
+          <td class="customers__table-cell">{{ customer.id }}</td>
+          <td class="customers__table-cell customers__table-cell--name">{{ customer.full_name }}</td>
+          <td class="customers__table-cell">{{ customer.username }}</td>
+          <td class="customers__table-cell">{{ customer.email }}</td>
+          <td class="customers__table-cell">{{ customer.phone_number }}</td>
+          <td class="customers__table-cell">{{ customer.gender || '-' }}</td>
+          <td class="customers__table-cell">{{ formatDate(customer.date_of_birth) }}</td>
+          <td class="customers__table-cell customers__table-cell--actions">
+            <button class="customers__action-btn customers__action-btn--edit" (click)="openEditModal(customer)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="customers__action-btn customers__action-btn--delete" (click)="deleteCustomer(customer.id ?? 0)">
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="filteredCustomers.length === 0" class="customers__table-row">
+          <td class="customers__table-cell" colspan="8" style="text-align: center;">
+            No customers found
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Customer Form Modal -->
+  <div class="customers__form-container" *ngIf="isFormVisible" (click)="resetForm()">
+    <div class="customers__form" (click)="$event.stopPropagation()">
+      <h2 class="customers__form-title">{{ isEditMode ? 'Edit Customer' : 'Add New Customer' }}</h2>
+      
+      <div class="customers__form-row">
+        <div class="customers__form-group customers__form-group--half">
+          <label class="customers__form-label">Full Name *</label>
+          <input type="text" class="customers__form-input" [(ngModel)]="customerForm.full_name" required>
+        </div>
+        
+        <div class="customers__form-group customers__form-group--half">
+          <label class="customers__form-label">Username *</label>
+          <input type="text" class="customers__form-input" [(ngModel)]="customerForm.username" required>
+        </div>
+      </div>
+      
+      <div class="customers__form-row">
+        <div class="customers__form-group customers__form-group--half">
+          <label class="customers__form-label">Email *</label>
+          <input type="email" class="customers__form-input" [(ngModel)]="customerForm.email" required>
+        </div>
+        
+        <div class="customers__form-group customers__form-group--half">
+          <label class="customers__form-label">Phone Number *</label>
+          <input type="text" class="customers__form-input" [(ngModel)]="customerForm.phone_number" required>
+        </div>
+      </div>
+      
+      <div class="customers__form-group">
+        <label class="customers__form-label">Password {{ isEditMode ? '' : '*' }}</label>
+        <input type="password" class="customers__form-input" [(ngModel)]="customerForm.password" 
+               [required]="!isEditMode">
+        <small class="customers__form-help" *ngIf="isEditMode">
+          Leave blank to keep the existing password
+        </small>
+      </div>
+      
+      <div class="customers__form-row">
+        <div class="customers__form-group customers__form-group--half">
+          <label class="customers__form-label">Date of Birth</label>
+          <input type="date" class="customers__form-input" [(ngModel)]="customerForm.date_of_birth">
+        </div>
+        
+        <div class="customers__form-group customers__form-group--half">
+          <label class="customers__form-label">Gender</label>
+          <select class="customers__form-select" [(ngModel)]="customerForm.gender">
+            <option value="">-- Select Gender --</option>
+            <option value="Nam">Nam</option>
+            <option value="Nữ">Nữ</option>
+            <option value="Khác">Khác</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="customers__form-group">
+        <label class="customers__form-label">Address 1</label>
+        <input type="text" class="customers__form-input" [(ngModel)]="customerForm.address1">
+      </div>
+      
+      <div class="customers__form-group">
+        <label class="customers__form-label">Address 2</label>
+        <input type="text" class="customers__form-input" [(ngModel)]="customerForm.address2">
+      </div>
+      
+      <div class="customers__form-actions">
+        <button class="customers__btn customers__btn--secondary" (click)="resetForm()">Cancel</button>
+        <button class="customers__btn customers__btn--primary" (click)="saveCustomer()">
+          {{ isEditMode ? 'Update' : 'Save' }}
+        </button>
+      </div>
+      
+      <div class="customers__form-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+</div> 

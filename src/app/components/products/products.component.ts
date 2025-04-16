@@ -26,7 +26,7 @@ export class ProductsComponent implements OnInit {
   
   // Pagination properties
   currentPage: number = 1;
-  pageSize: number = 9;
+  pageSize: number = 10;
   totalPages: number = 0;
   
   // Sorting properties

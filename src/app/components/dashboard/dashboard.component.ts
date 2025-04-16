@@ -6,11 +6,20 @@ import { ChartComponent } from '../chart/chart.component';
 import { FormsModule } from '@angular/forms';
 import { ProductsComponent } from '../products/products.component';
 import { CategoriesComponent } from '../categories/categories.component';
+import { CustomersComponent } from '../customers/customers.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ChartComponent, FormsModule, ProductsComponent, CategoriesComponent],
+  imports: [
+    CommonModule, 
+    RouterModule, 
+    ChartComponent, 
+    FormsModule, 
+    ProductsComponent, 
+    CategoriesComponent,
+    CustomersComponent
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -29,6 +38,12 @@ export class DashboardComponent implements OnInit {
   constructor(private dashboardService: DashboardService) { }
 
   ngOnInit(): void {
+    // Restore the active tab from localStorage if available
+    const savedTab = localStorage.getItem('activeTab');
+    if (savedTab) {
+      this.activeTab = savedTab;
+    }
+    
     this.loadCardData();
     this.loadChartData();
     this.loadRecentOrders();
@@ -87,5 +102,7 @@ export class DashboardComponent implements OnInit {
   // Method to change active tab
   changeTab(tab: string): void {
     this.activeTab = tab;
+    // Save the active tab to localStorage
+    localStorage.setItem('activeTab', tab);
   }
 }

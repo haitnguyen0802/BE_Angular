@@ -199,9 +199,8 @@ export class CategoriesComponent implements OnInit {
     
     this.categoryService.deleteCategory(id).subscribe({
       next: () => {
-        this.categories = this.categories.filter(c => c.id !== id);
-        this.filteredCategories = [...this.categories];
-        this.isLoading = false;
+        // Reload the categories data from the API
+        this.loadCategories();
       },
       error: (error) => {
         console.error('Error deleting category:', error);
@@ -216,9 +215,33 @@ export class CategoriesComponent implements OnInit {
    */
   toggleStatus(category: CategoryViewModel): void {
     // Toggle between 1 (active) and 0 (inactive)
-    category.status = category.status === 1 ? 0 : 1;
-    category.status_text = category.status === 1 ? 'active' : 'inactive';
-    // Note: This is local only as the API doesn't support status updates
+    const newStatus = category.status === 1 ? 0 : 1;
+    
+    // Check if the category has an ID
+    if (category.id) {
+      this.isLoading = true;
+      
+      // Prepare data for API
+      const categoryData: Category = {
+        category_name: category.category_name,
+        slug: category.slug,
+        description: category.description,
+        status: newStatus
+      };
+      
+      // Update via API
+      this.categoryService.updateCategory(category.id, categoryData).subscribe({
+        next: () => {
+          // Reload the categories data from the API
+          this.loadCategories();
+        },
+        error: (error) => {
+          console.error('Error updating category status:', error);
+          this.errorMessage = 'Failed to update category status. Please try again.';
+          this.isLoading = false;
+        }
+      });
+    }
   }
 
   /**
@@ -226,10 +249,31 @@ export class CategoriesComponent implements OnInit {
    */
   private handleSuccess(message: string): void {
     console.log(message);
-    this.filteredCategories = [...this.categories];
+    
+    // Reload the categories data from the API to ensure fresh data
+    this.loadCategories();
+    
+    // Reset the form and hide it
     this.resetForm();
     this.isLoading = false;
     this.isFormVisible = false;
+    
+    // Display a success message to the user
+    this.errorMessage = ''; // Clear any error messages
+    // You could add a success message display here if desired
+  }
+
+  /**
+   * Refresh categories data without changing the active tab
+   */
+  refreshCategories(): void {
+    // Only update the filtered categories based on existing data
+    this.filteredCategories = [...this.categories];
+    
+    // Apply current search filter if any
+    if (this.searchQuery.trim()) {
+      this.searchCategories();
+    }
   }
 
   /**
@@ -259,5 +303,23 @@ export class CategoriesComponent implements OnInit {
     this.isEditMode = false;
     this.isFormVisible = false;
     this.errorMessage = '';
+  }
+
+  /**
+   * Auto-generate a slug from the category name
+   */
+  generateSlug(): void {
+    if (this.categoryForm.category_name) {
+      // Convert to lowercase, replace spaces with hyphens, and remove special characters
+      this.categoryForm.slug = this.categoryForm.category_name
+        .toLowerCase()
+        .replace(/\s+/g, '-')          // Replace spaces with hyphens
+        .replace(/[^\w\-]+/g, '')      // Remove non-word chars except hyphens
+        .replace(/\-\-+/g, '-')        // Replace multiple hyphens with single hyphen
+        .replace(/^-+/, '')            // Trim hyphens from start
+        .replace(/-+$/, '');           // Trim hyphens from end
+    } else {
+      this.categoryForm.slug = '';
+    }
   }
 } 

@@ -31,16 +31,8 @@
             <span class="dashboard__nav-text">Products</span>
           </a>
         </li>
-        <li class="dashboard__nav-item">
-          <a href="#" class="dashboard__nav-link">
-            <span class="dashboard__nav-icon">
-              <i class="fa fa-chart-bar"></i>
-            </span>
-            <span class="dashboard__nav-text">Analytics</span>
-          </a>
-        </li>
-        <li class="dashboard__nav-item">
-          <a href="#" class="dashboard__nav-link">
+        <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'customers'}">
+          <a (click)="changeTab('customers')" class="dashboard__nav-link">
             <span class="dashboard__nav-icon">
               <i class="fa fa-users"></i>
             </span>
@@ -74,10 +66,10 @@
     <!-- Header -->
     <header class="dashboard__header">
       <div class="dashboard__search">
-        <input type="text" class="dashboard__search-input" placeholder="Search...">
-        <button class="dashboard__search-btn">
-          <i class="fa fa-search"></i>
-        </button>
+        <!-- <input type="text" class="dashboard__search-input" placeholder="Search..."> -->
+        <!-- <button class="dashboard__search-btn"> -->
+          <!-- <i class="fa fa-search"></i> -->
+        <!-- </button> -->
       </div>
       
       <div class="dashboard__actions">
@@ -202,6 +194,11 @@
     <!-- Categories Tab -->
     <div *ngIf="activeTab === 'categories'">
       <app-categories></app-categories>
+    </div>
+
+    <!-- Customers Tab -->
+    <div *ngIf="activeTab === 'customers'">
+      <app-customers></app-customers>
     </div>
   </main>
 </div>

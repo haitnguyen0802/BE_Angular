@@ -1,5 +1,13 @@
 <!-- Categories Content -->
 <div class="dashboard__content">
+  <!-- Loading Overlay -->
+  <div class="categories__loading-overlay" *ngIf="isLoading">
+    <div class="categories__loading-spinner">
+      <i class="fa fa-spinner fa-spin"></i>
+      <span>Loading...</span>
+    </div>
+  </div>
+
   <div class="categories__header">
     <div class="categories__title-wrapper">
       <h1 class="categories__title">Categories Management</h1>
@@ -84,7 +92,18 @@
       
       <div class="categories__form-group">
         <label class="categories__form-label">Category Name</label>
-        <input type="text" class="categories__form-input" [(ngModel)]="categoryForm.category_name" required>
+        <input 
+          type="text" 
+          class="categories__form-input" 
+          [(ngModel)]="categoryForm.category_name" 
+          (ngModelChange)="generateSlug()"
+          required>
+      </div>
+      
+      <div class="categories__form-group">
+        <label class="categories__form-label">Slug</label>
+        <input type="text" class="categories__form-input" [(ngModel)]="categoryForm.slug" required>
+        <small class="categories__form-help">URL-friendly version of the name. Use lowercase letters, numbers, and hyphens only.</small>
       </div>
       
       <div class="categories__form-group">
