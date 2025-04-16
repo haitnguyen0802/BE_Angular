@@ -7,20 +7,28 @@
     
     <nav class="dashboard__nav">
       <ul class="dashboard__nav-list">
-        <li class="dashboard__nav-item dashboard__nav-item--active">
-          <a routerLink="/dashboard" class="dashboard__nav-link">
+        <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'dashboard'}">
+          <a (click)="changeTab('dashboard')" class="dashboard__nav-link">
             <span class="dashboard__nav-icon">
               <i class="fa fa-home"></i>
             </span>
             <span class="dashboard__nav-text">Dashboard</span>
           </a>
         </li>
-        <li class="dashboard__nav-item">
+        <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'categories'}">
           <a routerLink="/categories" class="dashboard__nav-link">
             <span class="dashboard__nav-icon">
               <i class="fa fa-list"></i>
             </span>
             <span class="dashboard__nav-text">Categories</span>
+          </a>
+        </li>
+        <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'products'}">
+          <a (click)="changeTab('products')" class="dashboard__nav-link">
+            <span class="dashboard__nav-icon">
+              <i class="fa fa-shopping-cart"></i>
+            </span>
+            <span class="dashboard__nav-text">Products</span>
           </a>
         </li>
         <li class="dashboard__nav-item">
@@ -29,14 +37,6 @@
               <i class="fa fa-chart-bar"></i>
             </span>
             <span class="dashboard__nav-text">Analytics</span>
-          </a>
-        </li>
-        <li class="dashboard__nav-item">
-          <a href="#" class="dashboard__nav-link">
-            <span class="dashboard__nav-icon">
-              <i class="fa fa-shopping-cart"></i>
-            </span>
-            <span class="dashboard__nav-text">Products</span>
           </a>
         </li>
         <li class="dashboard__nav-item">
@@ -92,103 +92,111 @@
       </div>
     </header>
     
-    <!-- Overview -->
-    <section class="dashboard__overview">
-      <div *ngFor="let card of cardData; let i = index" 
-           class="dashboard__card" 
-           [ngClass]="{
-             'dashboard__card--primary': i === 0,
-             'dashboard__card--success': i === 1,
-             'dashboard__card--warning': i === 2,
-             'dashboard__card--danger': i === 3
-           }">
-        <div class="dashboard__card-icon">
-          <i class="fa {{ card.icon }}"></i>
-        </div>
-        <div class="dashboard__card-content">
-          <h3 class="dashboard__card-title">{{ card.title }}</h3>
-          <p class="dashboard__card-value">{{ card.value }}</p>
-          <p class="dashboard__card-change" 
-             [ngClass]="{'dashboard__card-change--up': card.change > 0, 'dashboard__card-change--down': card.change < 0}">
-            <i class="fa" [ngClass]="card.change > 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
-            {{ Math.abs(card.change) }}%
-          </p>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Charts and Tables -->
-    <div class="dashboard__content">
-      <!-- Revenue Chart -->
-      <section class="dashboard__chart-container">
-        <div class="dashboard__chart-header">
-          <h2 class="dashboard__chart-title">Revenue Overview</h2>
-          <div class="dashboard__chart-actions">
-            <button class="dashboard__chart-btn" 
-                    [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'week'}"
-                    (click)="changePeriod('week')">Week</button>
-            <button class="dashboard__chart-btn" 
-                    [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'month'}"
-                    (click)="changePeriod('month')">Month</button>
-            <button class="dashboard__chart-btn" 
-                    [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'year'}"
-                    (click)="changePeriod('year')">Year</button>
+    <!-- Dashboard Tab -->
+    <div *ngIf="activeTab === 'dashboard'">
+      <!-- Overview -->
+      <section class="dashboard__overview">
+        <div *ngFor="let card of cardData; let i = index" 
+             class="dashboard__card" 
+             [ngClass]="{
+               'dashboard__card--primary': i === 0,
+               'dashboard__card--success': i === 1,
+               'dashboard__card--warning': i === 2,
+               'dashboard__card--danger': i === 3
+             }">
+          <div class="dashboard__card-icon">
+            <i class="fa {{ card.icon }}"></i>
           </div>
-        </div>
-        <div class="dashboard__chart">
-          <!-- Chart will be rendered here by a chart library -->
-          <div class="dashboard__chart-placeholder" *ngIf="!chartData">
-            Loading chart data...
+          <div class="dashboard__card-content">
+            <h3 class="dashboard__card-title">{{ card.title }}</h3>
+            <p class="dashboard__card-value">{{ card.value }}</p>
+            <p class="dashboard__card-change" 
+               [ngClass]="{'dashboard__card-change--up': card.change > 0, 'dashboard__card-change--down': card.change < 0}">
+              <i class="fa" [ngClass]="card.change > 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+              {{ Math.abs(card.change) }}%
+            </p>
           </div>
-          <app-chart *ngIf="chartData" [chartData]="chartData" [chartType]="'line'"></app-chart>
         </div>
       </section>
       
-      <!-- Recent Orders -->
-      <section class="dashboard__table-container">
-        <div class="dashboard__table-header">
-          <h2 class="dashboard__table-title">Recent Orders</h2>
-          <button class="dashboard__table-btn">
-            View All <i class="fa fa-arrow-right"></i>
-          </button>
-        </div>
-        <div class="dashboard__table-wrapper">
-          <table class="dashboard__table">
-            <thead class="dashboard__table-head">
-              <tr>
-                <th class="dashboard__table-heading">Order ID</th>
-                <th class="dashboard__table-heading">Customer</th>
-                <th class="dashboard__table-heading">Date</th>
-                <th class="dashboard__table-heading">Amount</th>
-                <th class="dashboard__table-heading">Status</th>
-              </tr>
-            </thead>
-            <tbody class="dashboard__table-body">
-              <tr *ngFor="let order of recentOrders" class="dashboard__table-row">
-                <td class="dashboard__table-cell">{{ order.id }}</td>
-                <td class="dashboard__table-cell">{{ order.customer }}</td>
-                <td class="dashboard__table-cell">{{ order.date }}</td>
-                <td class="dashboard__table-cell">{{ order.amount }}</td>
-                <td class="dashboard__table-cell">
-                  <span class="dashboard__badge" 
-                        [ngClass]="{
-                          'dashboard__badge--success': order.status === 'completed',
-                          'dashboard__badge--pending': order.status === 'pending',
-                          'dashboard__badge--cancelled': order.status === 'cancelled'
-                        }">
-                    {{ order.status | titlecase }}
-                  </span>
-                </td>
-              </tr>
-              <tr *ngIf="recentOrders.length === 0" class="dashboard__table-row">
-                <td class="dashboard__table-cell" colspan="5" style="text-align: center;">
-                  No recent orders found
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <!-- Charts and Tables -->
+      <div class="dashboard__content">
+        <!-- Revenue Chart -->
+        <section class="dashboard__chart-container">
+          <div class="dashboard__chart-header">
+            <h2 class="dashboard__chart-title">Revenue Overview</h2>
+            <div class="dashboard__chart-actions">
+              <button class="dashboard__chart-btn" 
+                      [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'week'}"
+                      (click)="changePeriod('week')">Week</button>
+              <button class="dashboard__chart-btn" 
+                      [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'month'}"
+                      (click)="changePeriod('month')">Month</button>
+              <button class="dashboard__chart-btn" 
+                      [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'year'}"
+                      (click)="changePeriod('year')">Year</button>
+            </div>
+          </div>
+          <div class="dashboard__chart">
+            <!-- Chart will be rendered here by a chart library -->
+            <div class="dashboard__chart-placeholder" *ngIf="!chartData">
+              Loading chart data...
+            </div>
+            <app-chart *ngIf="chartData" [chartData]="chartData" [chartType]="'line'"></app-chart>
+          </div>
+        </section>
+        
+        <!-- Recent Orders -->
+        <section class="dashboard__table-container">
+          <div class="dashboard__table-header">
+            <h2 class="dashboard__table-title">Recent Orders</h2>
+            <button class="dashboard__table-btn">
+              View All <i class="fa fa-arrow-right"></i>
+            </button>
+          </div>
+          <div class="dashboard__table-wrapper">
+            <table class="dashboard__table">
+              <thead class="dashboard__table-head">
+                <tr>
+                  <th class="dashboard__table-heading">Order ID</th>
+                  <th class="dashboard__table-heading">Customer</th>
+                  <th class="dashboard__table-heading">Date</th>
+                  <th class="dashboard__table-heading">Amount</th>
+                  <th class="dashboard__table-heading">Status</th>
+                </tr>
+              </thead>
+              <tbody class="dashboard__table-body">
+                <tr *ngFor="let order of recentOrders" class="dashboard__table-row">
+                  <td class="dashboard__table-cell">{{ order.id }}</td>
+                  <td class="dashboard__table-cell">{{ order.customer }}</td>
+                  <td class="dashboard__table-cell">{{ order.date }}</td>
+                  <td class="dashboard__table-cell">{{ order.amount }}</td>
+                  <td class="dashboard__table-cell">
+                    <span class="dashboard__badge" 
+                          [ngClass]="{
+                            'dashboard__badge--success': order.status === 'completed',
+                            'dashboard__badge--pending': order.status === 'pending',
+                            'dashboard__badge--cancelled': order.status === 'cancelled'
+                          }">
+                      {{ order.status | titlecase }}
+                    </span>
+                  </td>
+                </tr>
+                <tr *ngIf="recentOrders.length === 0" class="dashboard__table-row">
+                  <td class="dashboard__table-cell" colspan="5" style="text-align: center;">
+                    No recent orders found
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+    
+    <!-- Products Tab -->
+    <div *ngIf="activeTab === 'products'">
+      <app-products></app-products>
     </div>
   </main>
 </div>

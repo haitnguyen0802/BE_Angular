@@ -1,0 +1,483 @@
+// Import dashboard base styles if needed
+// @import '../dashboard/dashboard.component.scss';
+
+// Products specific styles
+
+// Header & General Layout
+.products {
+  &__header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  &__search {
+    flex: 1;
+    max-width: 400px;
+
+    &-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      
+      &:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+      }
+    }
+  }
+
+  &__add-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: #0069d9;
+    }
+    
+    i {
+      margin-right: 0.5rem;
+    }
+  }
+
+  &__header {
+    margin-bottom: 2rem;
+  }
+
+  &__title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  &__subtitle {
+    font-size: 1rem;
+    color: #666;
+  }
+
+  // Loading
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+    color: #666;
+    
+    &-spinner {
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: #007bff;
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 1rem;
+    }
+  }
+
+  // Grid layout for products
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+  }
+
+  // Empty state
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+    text-align: center;
+    
+    &-icon {
+      font-size: 3rem;
+      color: #ccc;
+      margin-bottom: 1rem;
+    }
+    
+    &-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    
+    &-message {
+      color: #666;
+      max-width: 500px;
+      margin-bottom: 1.5rem;
+    }
+    
+    &-btn {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      
+      &:hover {
+        background-color: #0069d9;
+      }
+      
+      i {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+// Product Card
+.product-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  &__image {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+  }
+  
+  &:hover &__image img {
+    transform: scale(1.05);
+  }
+  
+  &__content {
+    padding: 1.25rem;
+  }
+  
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 3rem;
+  }
+  
+  &__code {
+    color: #666;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  &__price {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #007bff;
+    margin-bottom: 1rem;
+  }
+  
+  &__details {
+    margin-bottom: 1.25rem;
+    font-size: 0.875rem;
+    
+    p {
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+  }
+  
+  &__status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    background-color: #e6f7ff;
+    color: #0070f3;
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+  
+  &__actions {
+    display: flex;
+    border-top: 1px solid #eee;
+  }
+  
+  &__btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    background: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    
+    i {
+      margin-right: 0.35rem;
+    }
+    
+    &--edit {
+      color: #007bff;
+      
+      &:hover {
+        background-color: #f0f7ff;
+      }
+    }
+    
+    &--delete {
+      color: #dc3545;
+      border-left: 1px solid #eee;
+      
+      &:hover {
+        background-color: #fff5f5;
+      }
+    }
+  }
+}
+
+// Modal styles
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  
+  &--active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  &__backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  &__content {
+    position: relative;
+    background-color: white;
+    width: 100%;
+    max-width: 700px;
+    max-height: 90vh;
+    border-radius: 8px;
+    overflow-y: auto;
+    z-index: 1001;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s;
+    
+    .modal--active & {
+      transform: translateY(0);
+    }
+    
+    &--sm {
+      max-width: 500px;
+    }
+  }
+  
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #eee;
+  }
+  
+  &__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  &__close {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+    
+    &:hover {
+      color: #333;
+    }
+  }
+  
+  &__body {
+    padding: 1.5rem;
+  }
+  
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1.25rem 1.5rem;
+    border-top: 1px solid #eee;
+    gap: 0.75rem;
+  }
+  
+  &__btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    
+    &--primary {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      
+      &:hover {
+        background-color: #0069d9;
+      }
+      
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+    }
+    
+    &--secondary {
+      background-color: #f8f9fa;
+      color: #333;
+      border: 1px solid #ddd;
+      
+      &:hover {
+        background-color: #e9ecef;
+      }
+    }
+    
+    &--danger {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      
+      &:hover {
+        background-color: #c82333;
+      }
+      
+      &:disabled {
+        background-color: #e39aa0;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// Form Styles
+.form {
+  &-group {
+    margin-bottom: 1.25rem;
+    
+    &--half {
+      flex: 1;
+    }
+  }
+  
+  &-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+  
+  &-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  &-input, &-select, &-textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+    
+    &--error {
+      border-color: #dc3545;
+      
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+      }
+    }
+  }
+  
+  &-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  &-error {
+    margin-top: 0.35rem;
+    color: #dc3545;
+    font-size: 0.875rem;
+  }
+}
+
+// Delete confirmation dialog
+.delete-confirm {
+  text-align: center;
+  padding: 1rem 0;
+  
+  &__icon {
+    font-size: 3rem;
+    color: #dc3545;
+    margin-bottom: 1rem;
+  }
+  
+  &__text {
+    color: #555;
+  }
+}
+
+// Animation
+@keyframes spin {
+  to { transform: rotate(360deg); }
+} 

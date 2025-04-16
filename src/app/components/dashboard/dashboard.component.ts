@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DashboardService, CardData, Order, ChartData } from '../../services/dashboard.service';
 import { ChartComponent } from '../chart/chart.component';
+import { FormsModule } from '@angular/forms';
+import { ProductsComponent } from '../products/products.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ChartComponent],
+  imports: [CommonModule, RouterModule, ChartComponent, FormsModule, ProductsComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -19,6 +21,9 @@ export class DashboardComponent implements OnInit {
   selectedPeriod: 'week' | 'month' | 'year' = 'week';
   // Expose Math to the template
   Math = Math;
+  
+  // Tab control
+  activeTab: string = 'dashboard';
   
   constructor(private dashboardService: DashboardService) { }
 
@@ -76,5 +81,10 @@ export class DashboardComponent implements OnInit {
   changePeriod(period: 'week' | 'month' | 'year'): void {
     this.selectedPeriod = period;
     this.loadChartData();
+  }
+
+  // Method to change active tab
+  changeTab(tab: string): void {
+    this.activeTab = tab;
   }
 }
