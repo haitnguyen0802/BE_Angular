@@ -4,17 +4,17 @@
   <div class="customers__loading-overlay" *ngIf="isLoading">
     <div class="customers__loading-spinner">
       <i class="fa fa-spinner fa-spin"></i>
-      <span>Loading...</span>
+      <span>{{ 'loading' | translate }}...</span>
     </div>
   </div>
 
   <div class="customers__header">
     <div class="customers__title-wrapper">
-      <h1 class="customers__title">Customers Management</h1>
-      <p class="customers__subtitle">Manage your customers</p>
+      <h1 class="customers__title">{{ 'customers' | translate }} {{ 'management' | translate }}</h1>
+      <p class="customers__subtitle">{{ 'manageCustomersDescription' | translate }}</p>
     </div>
     <button class="customers__btn customers__btn--primary" (click)="openAddModal()">
-      <i class="fa fa-plus"></i> Add New Customer
+      <i class="fa fa-plus"></i> {{ 'add' | translate }} {{ 'new' | translate }} {{ 'customer' | translate }}
     </button>
   </div>
 
@@ -23,7 +23,7 @@
       <input 
         type="text" 
         class="customers__search-input" 
-        placeholder="Search customers by name, email or phone..." 
+        placeholder="{{ 'searchCustomers' | translate }}..." 
         [(ngModel)]="searchQuery"
         (input)="searchCustomers()">
       <button class="customers__search-btn">
@@ -36,14 +36,14 @@
     <table class="customers__table">
       <thead class="customers__table-head">
         <tr>
-          <th class="customers__table-heading">ID</th>
-          <th class="customers__table-heading">Full Name</th>
-          <th class="customers__table-heading">Username</th>
-          <th class="customers__table-heading">Email</th>
-          <th class="customers__table-heading">Phone</th>
-          <th class="customers__table-heading">Gender</th>
-          <th class="customers__table-heading">Date of Birth</th>
-          <th class="customers__table-heading">Actions</th>
+          <th class="customers__table-heading">{{ 'id' | translate }}</th>
+          <th class="customers__table-heading">{{ 'fullName' | translate }}</th>
+          <th class="customers__table-heading">{{ 'username' | translate }}</th>
+          <th class="customers__table-heading">{{ 'email' | translate }}</th>
+          <th class="customers__table-heading">{{ 'phone' | translate }}</th>
+          <th class="customers__table-heading">{{ 'gender' | translate }}</th>
+          <th class="customers__table-heading">{{ 'dateOfBirth' | translate }}</th>
+          <th class="customers__table-heading">{{ 'actions' | translate }}</th>
         </tr>
       </thead>
       <tbody class="customers__table-body">
@@ -66,7 +66,7 @@
         </tr>
         <tr *ngIf="filteredCustomers.length === 0" class="customers__table-row">
           <td class="customers__table-cell" colspan="8" style="text-align: center;">
-            No customers found
+            {{ 'noCustomersFound' | translate }}
           </td>
         </tr>
       </tbody>
@@ -76,72 +76,72 @@
   <!-- Customer Form Modal -->
   <div class="customers__form-container" *ngIf="isFormVisible" (click)="resetForm()">
     <div class="customers__form" (click)="$event.stopPropagation()">
-      <h2 class="customers__form-title">{{ isEditMode ? 'Edit Customer' : 'Add New Customer' }}</h2>
+      <h2 class="customers__form-title">{{ isEditMode ? ('edit' | translate) + ' ' + ('customer' | translate) : ('add' | translate) + ' ' + ('new' | translate) + ' ' + ('customer' | translate) }}</h2>
       
       <div class="customers__form-row">
         <div class="customers__form-group customers__form-group--half">
-          <label class="customers__form-label">Full Name *</label>
+          <label class="customers__form-label">{{ 'fullName' | translate }} *</label>
           <input type="text" class="customers__form-input" [(ngModel)]="customerForm.full_name" required>
         </div>
         
         <div class="customers__form-group customers__form-group--half">
-          <label class="customers__form-label">Username *</label>
+          <label class="customers__form-label">{{ 'username' | translate }} *</label>
           <input type="text" class="customers__form-input" [(ngModel)]="customerForm.username" required>
         </div>
       </div>
       
       <div class="customers__form-row">
         <div class="customers__form-group customers__form-group--half">
-          <label class="customers__form-label">Email *</label>
+          <label class="customers__form-label">{{ 'email' | translate }} *</label>
           <input type="email" class="customers__form-input" [(ngModel)]="customerForm.email" required>
         </div>
         
         <div class="customers__form-group customers__form-group--half">
-          <label class="customers__form-label">Phone Number *</label>
+          <label class="customers__form-label">{{ 'phone' | translate }} *</label>
           <input type="text" class="customers__form-input" [(ngModel)]="customerForm.phone_number" required>
         </div>
       </div>
       
       <div class="customers__form-group">
-        <label class="customers__form-label">Password {{ isEditMode ? '' : '*' }}</label>
+        <label class="customers__form-label">{{ 'password' | translate }} {{ isEditMode ? '' : '*' }}</label>
         <input type="password" class="customers__form-input" [(ngModel)]="customerForm.password" 
                [required]="!isEditMode">
         <small class="customers__form-help" *ngIf="isEditMode">
-          Leave blank to keep the existing password
+          {{ 'leaveBlankPassword' | translate }}
         </small>
       </div>
       
       <div class="customers__form-row">
         <div class="customers__form-group customers__form-group--half">
-          <label class="customers__form-label">Date of Birth</label>
+          <label class="customers__form-label">{{ 'dateOfBirth' | translate }}</label>
           <input type="date" class="customers__form-input" [(ngModel)]="customerForm.date_of_birth">
         </div>
         
         <div class="customers__form-group customers__form-group--half">
-          <label class="customers__form-label">Gender</label>
+          <label class="customers__form-label">{{ 'gender' | translate }}</label>
           <select class="customers__form-select" [(ngModel)]="customerForm.gender">
-            <option value="">-- Select Gender --</option>
-            <option value="Nam">Nam</option>
-            <option value="Nữ">Nữ</option>
-            <option value="Khác">Khác</option>
+            <option value="">-- {{ 'selectGender' | translate }} --</option>
+            <option value="Nam">{{ 'male' | translate }}</option>
+            <option value="Nữ">{{ 'female' | translate }}</option>
+            <option value="Khác">{{ 'other' | translate }}</option>
           </select>
         </div>
       </div>
       
       <div class="customers__form-group">
-        <label class="customers__form-label">Address 1</label>
+        <label class="customers__form-label">{{ 'address1' | translate }}</label>
         <input type="text" class="customers__form-input" [(ngModel)]="customerForm.address1">
       </div>
       
       <div class="customers__form-group">
-        <label class="customers__form-label">Address 2</label>
+        <label class="customers__form-label">{{ 'address2' | translate }}</label>
         <input type="text" class="customers__form-input" [(ngModel)]="customerForm.address2">
       </div>
       
       <div class="customers__form-actions">
-        <button class="customers__btn customers__btn--secondary" (click)="resetForm()">Cancel</button>
+        <button class="customers__btn customers__btn--secondary" (click)="resetForm()">{{ 'cancel' | translate }}</button>
         <button class="customers__btn customers__btn--primary" (click)="saveCustomer()">
-          {{ isEditMode ? 'Update' : 'Save' }}
+          {{ isEditMode ? ('update' | translate) : ('save' | translate) }}
         </button>
       </div>
       

@@ -5,11 +5,13 @@ import { RouterModule } from '@angular/router';
 import { ProductService } from '../../services/product.service';
 import { Product } from '../../types/product';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-products',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule, TranslatePipe],
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
@@ -35,7 +37,8 @@ export class ProductsComponent implements OnInit {
   
   constructor(
     private productService: ProductService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private translationService: TranslationService
   ) {
     this.productForm = this.fb.group({
       product_name: ['', Validators.required],

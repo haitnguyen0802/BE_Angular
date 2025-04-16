@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 // Các loại theme
 export type ThemeMode = 'light' | 'dark' | 'auto';
 // Các loại ngôn ngữ
-export type Language = 'vi' | 'en';
+export type Language = 'vi' | 'en' | 'zh' | 'ja';
 // Các loại màu sắc theme
 export type ThemeColor = 'blue' | 'black' | 'white';
 

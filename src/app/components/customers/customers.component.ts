@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { User, UserViewModel } from '../../types/user';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './customers.component.html',
   styleUrls: ['./customers.component.scss']
 })
@@ -36,7 +38,10 @@ export class CustomersComponent implements OnInit {
     created_at: ''
   };
 
-  constructor(private userService: UserService) { }
+  constructor(
+    private userService: UserService,
+    private translationService: TranslationService
+  ) { }
 
   ngOnInit(): void {
     this.loadCustomers();

@@ -4,11 +4,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Order, OrderViewModel } from '../../types/order';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-orders',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './orders.component.html',
   styleUrls: ['./orders.component.scss']
 })
@@ -42,7 +44,8 @@ export class OrdersComponent implements OnInit {
   
   constructor(
     private orderService: OrderService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private translationService: TranslationService
   ) {
     this.orderForm = this.fb.group({
       customer_name: ['', [Validators.required]],

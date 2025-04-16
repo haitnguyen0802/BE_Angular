@@ -6,9 +6,9 @@
   </div>
 
   <header class="orders-header">
-    <h1 class="orders-title">Orders Management</h1>
+    <h1 class="orders-title">{{ 'orders' | translate }} {{ 'management' | translate }}</h1>
     <button class="orders-add-btn" (click)="openAddModal()">
-      <i class="fa fa-plus"></i> Add New Order
+      <i class="fa fa-plus"></i> {{ 'add' | translate }} {{ 'new' | translate }} {{ 'order' | translate }}
     </button>
   </header>
 
@@ -18,7 +18,7 @@
       <input 
         type="text" 
         class="orders-search-input" 
-        placeholder="Search orders..." 
+        placeholder="{{ 'searchOrders' | translate }}..." 
         [(ngModel)]="searchQuery"
         (input)="searchOrders()"
       >
@@ -34,7 +34,7 @@
   <!-- Loading Spinner -->
   <div *ngIf="loading" class="orders-loading">
     <div class="spinner"></div>
-    <p>Loading orders...</p>
+    <p>{{ 'loading' | translate }}...</p>
   </div>
 
   <!-- Orders Table -->
@@ -42,13 +42,13 @@
     <table class="orders-table">
       <thead>
         <tr>
-          <th>ID</th>
-          <th>Customer Name</th>
-          <th>Product ID</th>
-          <th>Quantity</th>
-          <th>Order Date</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th>{{ 'id' | translate }}</th>
+          <th>{{ 'customerName' | translate }}</th>
+          <th>{{ 'productId' | translate }}</th>
+          <th>{{ 'quantity' | translate }}</th>
+          <th>{{ 'orderDate' | translate }}</th>
+          <th>{{ 'status' | translate }}</th>
+          <th>{{ 'actions' | translate }}</th>
         </tr>
       </thead>
       <tbody>
@@ -65,7 +65,7 @@
                     'order-status-pending': order.status === 1,
                     'order-status-completed': order.status === 2
                   }">
-              {{ order.status === 0 ? 'Thất bại/Hủy' : order.status === 1 ? 'Đang chờ' : 'Thành công' }}
+              {{ order.status === 0 ? ('failed' | translate) : order.status === 1 ? ('pending' | translate) : ('completed' | translate) }}
             </span>
           </td>
           <td class="orders-actions">
@@ -79,7 +79,7 @@
         </tr>
         <tr *ngIf="filteredOrders.length === 0">
           <td colspan="7" class="orders-empty">
-            <p>No orders found. Try adjusting your search or add a new order.</p>
+            <p>{{ 'noOrdersFound' | translate }}</p>
           </td>
         </tr>
       </tbody>
@@ -90,14 +90,14 @@
   <div class="orders-modal" *ngIf="showModal">
     <div class="orders-modal-content">
       <div class="orders-modal-header">
-        <h2>{{ modalTitle }}</h2>
+        <h2>{{ modalTitle | translate }}</h2>
         <button class="orders-modal-close" (click)="closeModal()">×</button>
       </div>
       <div class="orders-modal-body">
         <form [formGroup]="orderForm" (ngSubmit)="saveOrder()">
           <!-- Customer Name Field -->
           <div class="form-group">
-            <label for="customer_name">Customer Name</label>
+            <label for="customer_name">{{ 'customerName' | translate }}</label>
             <input 
               type="text" 
               id="customer_name" 
@@ -106,13 +106,13 @@
               [ngClass]="{'is-invalid': orderForm.get('customer_name')?.touched && orderForm.get('customer_name')?.invalid}"
             >
             <div class="invalid-feedback" *ngIf="orderForm.get('customer_name')?.touched && orderForm.get('customer_name')?.invalid">
-              Customer name is required
+              {{ 'customerNameRequired' | translate }}
             </div>
           </div>
 
           <!-- Product ID Field -->
           <div class="form-group">
-            <label for="product_id">Product ID</label>
+            <label for="product_id">{{ 'productId' | translate }}</label>
             <input 
               type="number" 
               id="product_id" 
@@ -121,13 +121,13 @@
               [ngClass]="{'is-invalid': orderForm.get('product_id')?.touched && orderForm.get('product_id')?.invalid}"
             >
             <div class="invalid-feedback" *ngIf="orderForm.get('product_id')?.touched && orderForm.get('product_id')?.invalid">
-              Product ID is required
+              {{ 'productIdRequired' | translate }}
             </div>
           </div>
 
           <!-- Quantity Field -->
           <div class="form-group">
-            <label for="quantity">Quantity</label>
+            <label for="quantity">{{ 'quantity' | translate }}</label>
             <input 
               type="number" 
               id="quantity" 
@@ -136,13 +136,13 @@
               [ngClass]="{'is-invalid': orderForm.get('quantity')?.touched && orderForm.get('quantity')?.invalid}"
             >
             <div class="invalid-feedback" *ngIf="orderForm.get('quantity')?.touched && orderForm.get('quantity')?.invalid">
-              Quantity must be at least 1
+              {{ 'quantityMinimum' | translate }}
             </div>
           </div>
 
           <!-- Order Date Field -->
           <div class="form-group">
-            <label for="order_date">Order Date</label>
+            <label for="order_date">{{ 'orderDate' | translate }}</label>
             <input 
               type="date" 
               id="order_date" 
@@ -151,13 +151,13 @@
               [ngClass]="{'is-invalid': orderForm.get('order_date')?.touched && orderForm.get('order_date')?.invalid}"
             >
             <div class="invalid-feedback" *ngIf="orderForm.get('order_date')?.touched && orderForm.get('order_date')?.invalid">
-              Order date is required
+              {{ 'orderDateRequired' | translate }}
             </div>
           </div>
 
           <!-- Status Field -->
           <div class="form-group">
-            <label for="status">Status</label>
+            <label for="status">{{ 'status' | translate }}</label>
             <select 
               id="status" 
               formControlName="status" 
@@ -165,20 +165,20 @@
               [ngClass]="{'is-invalid': orderForm.get('status')?.touched && orderForm.get('status')?.invalid}"
             >
               <option *ngFor="let option of statusOptions" [value]="option.value">
-                {{ option.label }}
+                {{ option.value === 0 ? ('failed' | translate) : option.value === 1 ? ('pending' | translate) : ('completed' | translate) }}
               </option>
             </select>
             <div class="invalid-feedback" *ngIf="orderForm.get('status')?.touched && orderForm.get('status')?.invalid">
-              Status is required
+              {{ 'statusRequired' | translate }}
             </div>
           </div>
 
           <!-- Submit Button -->
           <div class="form-actions">
-            <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="processingAction">Cancel</button>
+            <button type="button" class="btn btn-secondary" (click)="closeModal()" [disabled]="processingAction">{{ 'cancel' | translate }}</button>
             <button type="submit" class="btn btn-primary" [disabled]="processingAction || orderForm.invalid">
               <span *ngIf="processingAction" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-              {{ currentOrderId ? 'Update' : 'Create' }} Order
+              {{ currentOrderId ? ('update' | translate) + ' ' + ('order' | translate) : ('create' | translate) + ' ' + ('order' | translate) }}
             </button>
           </div>
         </form>

@@ -3,6 +3,7 @@ import { ApiService } from './api.service';
 import { Observable, of, map } from 'rxjs';
 import { OrderService } from './order.service';
 import { Order as ApiOrder } from '../types/order';
+import { TranslationService } from './translation.service';
 
 // Define interfaces for dashboard data
 export interface ChartData {
@@ -36,7 +37,11 @@ export interface Order {
 })
 export class DashboardService {
 
-  constructor(private apiService: ApiService, private orderService: OrderService) { }
+  constructor(
+    private apiService: ApiService, 
+    private orderService: OrderService,
+    private translationService: TranslationService
+  ) { }
 
   /**
    * Get statistical card data
@@ -57,25 +62,25 @@ export class DashboardService {
         
         return [
           {
-            title: 'Tổng đơn hàng',
+            title: 'cardTotalOrders',
             value: totalOrders.toString(),
             change: 12.5,
             icon: 'fa-shopping-bag'
           },
           {
-            title: 'Đơn hàng thành công',
+            title: 'completed',
             value: successfulOrders.toString(),
             change: 8.2,
             icon: 'fa-check-circle'
           },
           {
-            title: 'Doanh thu',
-            value: `$${totalRevenue.toFixed(2)}`,
+            title: 'cardTotalRevenue',
+            value: totalRevenue.toFixed(2),
             change: 5.3,
             icon: 'fa-chart-line'
           },
           {
-            title: 'Đơn hàng đang chờ',
+            title: 'pending',
             value: pendingOrders.toString(),
             change: -3.8,
             icon: 'fa-clock'
@@ -100,8 +105,12 @@ export class DashboardService {
         
         switch (period) {
           case 'week':
-            // Labels cho các ngày trong tuần
-            labels = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+            // Sử dụng tiêu chuẩn quốc tế cho ngày trong tuần
+            // (ISO 8601: 1 = Monday, 7 = Sunday)
+            labels = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].map(day => 
+              this.translationService.get(day)
+            );
+            
             // Khởi tạo mảng dữ liệu với 0
             data = Array(7).fill(0);
             
@@ -121,8 +130,14 @@ export class DashboardService {
             break;
             
           case 'month':
-            // Labels cho các tuần trong tháng
-            labels = ['Tuần 1', 'Tuần 2', 'Tuần 3', 'Tuần 4'];
+            // Labels cho các tuần trong tháng - dùng chuỗi có thể dịch
+            labels = [
+              this.translationService.get('week') + ' 1',
+              this.translationService.get('week') + ' 2',
+              this.translationService.get('week') + ' 3',
+              this.translationService.get('week') + ' 4'
+            ];
+            
             // Khởi tạo mảng dữ liệu với 0
             data = Array(4).fill(0);
             
@@ -143,8 +158,12 @@ export class DashboardService {
             break;
             
           case 'year':
-            // Labels cho các tháng trong năm
-            labels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+            // Sử dụng tiêu chuẩn quốc tế cho tháng
+            // (1-12 = January to December)
+            labels = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'].map(month => 
+              this.translationService.get(month)
+            );
+            
             // Khởi tạo mảng dữ liệu với 0
             data = Array(12).fill(0);
             
@@ -165,7 +184,7 @@ export class DashboardService {
         return {
           labels,
           datasets: [{
-            label: 'Doanh thu',
+            label: this.translationService.get('revenue'),  // Sử dụng dịch thay vì chuỗi cứng
             data,
             backgroundColor: 'rgba(78, 115, 223, 0.1)',
             borderColor: '#4e73df',
@@ -219,7 +238,7 @@ export class DashboardService {
             year: 'numeric'
           }),
           // Giả định một giá trị amount dựa trên số lượng
-          amount: `$${(order.quantity * 100).toFixed(2)}`,
+          amount: (order.quantity * 100).toFixed(2),
           status: order.status !== undefined ? order.status : 1
         }));
       })

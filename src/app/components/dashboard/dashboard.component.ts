@@ -9,6 +9,8 @@ import { CategoriesComponent } from '../categories/categories.component';
 import { CustomersComponent } from '../customers/customers.component';
 import { OrdersComponent } from '../orders/orders.component';
 import { SettingsComponent } from '../settings/settings.component';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translation.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -22,7 +24,8 @@ import { SettingsComponent } from '../settings/settings.component';
     CategoriesComponent,
     CustomersComponent,
     OrdersComponent,
-    SettingsComponent
+    SettingsComponent,
+    TranslatePipe
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
@@ -39,7 +42,10 @@ export class DashboardComponent implements OnInit {
   // Tab control
   activeTab: string = 'dashboard';
   
-  constructor(private dashboardService: DashboardService) { }
+  constructor(
+    private dashboardService: DashboardService,
+    private translationService: TranslationService
+  ) { }
 
   ngOnInit(): void {
     // Restore the active tab from localStorage if available
@@ -54,11 +60,35 @@ export class DashboardComponent implements OnInit {
   }
   
   /**
+   * Get currency symbol based on the current language
+   */
+  get currencySymbol(): string {
+    const lang = this.getCurrentLanguage();
+    switch (lang) {
+      case 'vi': return '₫';
+      case 'zh': 
+      case 'ja': return '¥';
+      case 'en':
+      default: return '$';
+    }
+  }
+  
+  /**
+   * Get current language code
+   */
+  private getCurrentLanguage(): string {
+    // This is a simple implementation - in a real app you might want to 
+    // subscribe to language changes from the TranslationService
+    return document.documentElement.getAttribute('lang') || 'vi';
+  }
+  
+  /**
    * Load statistical card data
    */
   loadCardData(): void {
     this.dashboardService.getCardData().subscribe({
       next: (data) => {
+        // Sử dụng trực tiếp dữ liệu từ service mà không cần map lại
         this.cardData = data;
       },
       error: (error) => {

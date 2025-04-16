@@ -6,31 +6,31 @@
       <input 
         type="text" 
         class="products__search-input" 
-        placeholder="Search products..." 
+        placeholder="{{ 'searchProducts' | translate }}..." 
         [(ngModel)]="searchTerm"
         (input)="searchProducts()">
     </div>
     
     <button class="products__add-btn" (click)="openAddModal()">
-      <i class="fa fa-plus"></i> Add Product
+      <i class="fa fa-plus"></i> {{ 'add' | translate }} {{ 'product' | translate }}
     </button>
   </div>
 
   <!-- Products section header -->
   <div class="products__header">
-    <h1 class="products__title">Products Management</h1>
-    <p class="products__subtitle">Manage your product catalog</p>
+    <h1 class="products__title">{{ 'products' | translate }} {{ 'management' | translate }}</h1>
+    <p class="products__subtitle">{{ 'manageProductsDescription' | translate }}</p>
   </div>
   
   <!-- Sorting options -->
   <div class="products__sort">
-    <span class="products__sort-label">Sort by:</span>
+    <span class="products__sort-label">{{ 'sortBy' | translate }}:</span>
     <div class="products__sort-options">
       <button 
         class="products__sort-btn" 
         [class.products__sort-btn--active]="sortField === 'product_name'"
         (click)="changeSort('product_name')">
-        Name 
+        {{ 'name' | translate }} 
         <i *ngIf="sortField === 'product_name'" class="fa" 
            [ngClass]="sortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
       </button>
@@ -38,7 +38,7 @@
         class="products__sort-btn" 
         [class.products__sort-btn--active]="sortField === 'price'"
         (click)="changeSort('price')">
-        Price 
+        {{ 'price' | translate }} 
         <i *ngIf="sortField === 'price'" class="fa" 
            [ngClass]="sortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
       </button>
@@ -46,7 +46,7 @@
         class="products__sort-btn" 
         [class.products__sort-btn--active]="sortField === 'product_code'"
         (click)="changeSort('product_code')">
-        Code 
+        {{ 'code' | translate }} 
         <i *ngIf="sortField === 'product_code'" class="fa" 
            [ngClass]="sortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
       </button>
@@ -54,7 +54,7 @@
         class="products__sort-btn" 
         [class.products__sort-btn--active]="sortField === 'status'"
         (click)="changeSort('status')">
-        Status 
+        {{ 'status' | translate }} 
         <i *ngIf="sortField === 'status'" class="fa" 
            [ngClass]="sortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
       </button>
@@ -64,7 +64,7 @@
   <!-- Loading Indicator -->
   <div class="products__loading" *ngIf="isLoading">
     <div class="products__loading-spinner"></div>
-    <p>Loading products...</p>
+    <p>{{ 'loadingProducts' | translate }}...</p>
   </div>
   
   <!-- Products Grid -->
@@ -78,17 +78,17 @@
         <p class="product-card__code">{{ product.product_code }}</p>
         <p class="product-card__price">{{ formatPrice(product.price) }}</p>
         <div class="product-card__details">
-          <p><strong>Material:</strong> {{ product.material }}</p>
-          <p><strong>Size:</strong> {{ product.size }}</p>
-          <p><strong>Status:</strong> <span class="product-card__status">{{ product.status }}</span></p>
+          <p><strong>{{ 'material' | translate }}:</strong> {{ product.material }}</p>
+          <p><strong>{{ 'size' | translate }}:</strong> {{ product.size }}</p>
+          <p><strong>{{ 'status' | translate }}:</strong> <span class="product-card__status">{{ product.status }}</span></p>
         </div>
       </div>
       <div class="product-card__actions">
         <button class="product-card__btn product-card__btn--edit" (click)="openEditModal(product)">
-          <i class="fa fa-edit"></i> Edit
+          <i class="fa fa-edit"></i> {{ 'edit' | translate }}
         </button>
         <button class="product-card__btn product-card__btn--delete" (click)="openDeleteConfirm(product)">
-          <i class="fa fa-trash"></i> Delete
+          <i class="fa fa-trash"></i> {{ 'delete' | translate }}
         </button>
       </div>
     </div>
@@ -100,7 +100,7 @@
       class="products__pagination-btn products__pagination-btn--prev" 
       [disabled]="currentPage === 1"
       (click)="goToPage(currentPage - 1)">
-      <i class="fa fa-chevron-left"></i> Previous
+      <i class="fa fa-chevron-left"></i> {{ 'previous' | translate }}
     </button>
     
     <div class="products__pagination-pages">
@@ -135,12 +135,12 @@
       class="products__pagination-btn products__pagination-btn--next" 
       [disabled]="currentPage === totalPages"
       (click)="goToPage(currentPage + 1)">
-      Next <i class="fa fa-chevron-right"></i>
+      {{ 'next' | translate }} <i class="fa fa-chevron-right"></i>
     </button>
     
     <div class="products__pagination-info">
-      Page {{ currentPage }} of {{ totalPages }} 
-      ({{ products.length }} products total)
+      {{ 'page' | translate }} {{ currentPage }} {{ 'of' | translate }} {{ totalPages }} 
+      ({{ products.length }} {{ 'productsTotal' | translate }})
     </div>
   </div>
   
@@ -149,12 +149,12 @@
     <div class="products__empty-icon">
       <i class="fa fa-shopping-basket"></i>
     </div>
-    <h3 class="products__empty-title">No products found</h3>
+    <h3 class="products__empty-title">{{ 'noProductsFound' | translate }}</h3>
     <p class="products__empty-message">
-      There are no products matching your search or you haven't added any products yet.
+      {{ 'noProductsDescription' | translate }}
     </p>
     <button class="products__empty-btn" (click)="openAddModal()">
-      <i class="fa fa-plus"></i> Add Your First Product
+      <i class="fa fa-plus"></i> {{ 'addFirstProduct' | translate }}
     </button>
   </div>
 </div>
@@ -164,7 +164,7 @@
   <div class="modal__backdrop" (click)="closeModal()"></div>
   <div class="modal__content">
     <div class="modal__header">
-      <h2 class="modal__title">{{ isEditing ? 'Edit Product' : 'Add New Product' }}</h2>
+      <h2 class="modal__title">{{ isEditing ? ('edit' | translate) + ' ' + ('product' | translate) : ('add' | translate) + ' ' + ('new' | translate) + ' ' + ('product' | translate) }}</h2>
       <button class="modal__close" (click)="closeModal()">
         <i class="fa fa-times"></i>
       </button>
@@ -173,7 +173,7 @@
     <div class="modal__body">
       <form [formGroup]="productForm" (ngSubmit)="submitForm()">
         <div class="form-group">
-          <label for="product_name" class="form-label">Product Name</label>
+          <label for="product_name" class="form-label">{{ 'productName' | translate }}</label>
           <input 
             type="text" 
             id="product_name" 
@@ -181,13 +181,13 @@
             formControlName="product_name"
             [class.form-input--error]="productForm.get('product_name')?.invalid && productForm.get('product_name')?.touched">
           <div class="form-error" *ngIf="productForm.get('product_name')?.invalid && productForm.get('product_name')?.touched">
-            Product name is required
+            {{ 'productNameRequired' | translate }}
           </div>
         </div>
         
         <div class="form-row">
           <div class="form-group form-group--half">
-            <label for="product_code" class="form-label">Product Code</label>
+            <label for="product_code" class="form-label">{{ 'productCode' | translate }}</label>
             <input 
               type="text" 
               id="product_code" 
@@ -195,12 +195,12 @@
               formControlName="product_code"
               [class.form-input--error]="productForm.get('product_code')?.invalid && productForm.get('product_code')?.touched">
             <div class="form-error" *ngIf="productForm.get('product_code')?.invalid && productForm.get('product_code')?.touched">
-              Product code is required
+              {{ 'productCodeRequired' | translate }}
             </div>
           </div>
           
           <div class="form-group form-group--half">
-            <label for="price" class="form-label">Price</label>
+            <label for="price" class="form-label">{{ 'price' | translate }}</label>
             <input 
               type="text" 
               id="price" 
@@ -208,14 +208,14 @@
               formControlName="price"
               [class.form-input--error]="productForm.get('price')?.invalid && productForm.get('price')?.touched">
             <div class="form-error" *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched">
-              Price is required
+              {{ 'priceRequired' | translate }}
             </div>
           </div>
         </div>
         
         <div class="form-row">
           <div class="form-group form-group--half">
-            <label for="material" class="form-label">Material</label>
+            <label for="material" class="form-label">{{ 'material' | translate }}</label>
             <input 
               type="text" 
               id="material" 
@@ -223,12 +223,12 @@
               formControlName="material"
               [class.form-input--error]="productForm.get('material')?.invalid && productForm.get('material')?.touched">
             <div class="form-error" *ngIf="productForm.get('material')?.invalid && productForm.get('material')?.touched">
-              Material is required
+              {{ 'materialRequired' | translate }}
             </div>
           </div>
           
           <div class="form-group form-group--half">
-            <label for="size" class="form-label">Size</label>
+            <label for="size" class="form-label">{{ 'size' | translate }}</label>
             <input 
               type="text" 
               id="size" 
@@ -236,13 +236,13 @@
               formControlName="size"
               [class.form-input--error]="productForm.get('size')?.invalid && productForm.get('size')?.touched">
             <div class="form-error" *ngIf="productForm.get('size')?.invalid && productForm.get('size')?.touched">
-              Size is required
+              {{ 'sizeRequired' | translate }}
             </div>
           </div>
         </div>
         
         <div class="form-group">
-          <label for="colors" class="form-label">Colors (comma separated)</label>
+          <label for="colors" class="form-label">{{ 'colors' | translate }} ({{ 'commaSeparated' | translate }})</label>
           <input 
             type="text" 
             id="colors" 
@@ -250,26 +250,26 @@
             formControlName="colors"
             [class.form-input--error]="productForm.get('colors')?.invalid && productForm.get('colors')?.touched">
           <div class="form-error" *ngIf="productForm.get('colors')?.invalid && productForm.get('colors')?.touched">
-            Colors are required
+            {{ 'colorsRequired' | translate }}
           </div>
         </div>
         
         <div class="form-row">
           <div class="form-group form-group--half">
-            <label for="status" class="form-label">Status</label>
+            <label for="status" class="form-label">{{ 'status' | translate }}</label>
             <select 
               id="status" 
               class="form-select" 
               formControlName="status"
               [class.form-select--error]="productForm.get('status')?.invalid && productForm.get('status')?.touched">
-              <option value="Đang Có Sẵn">Đang Có Sẵn</option>
-              <option value="Hết Hàng">Hết Hàng</option>
-              <option value="Sắp Ra Mắt">Sắp Ra Mắt</option>
+              <option value="Đang Có Sẵn">{{ 'available' | translate }}</option>
+              <option value="Hết Hàng">{{ 'outOfStock' | translate }}</option>
+              <option value="Sắp Ra Mắt">{{ 'comingSoon' | translate }}</option>
             </select>
           </div>
           
           <div class="form-group form-group--half">
-            <label for="category_id" class="form-label">Category ID</label>
+            <label for="category_id" class="form-label">{{ 'categoryId' | translate }}</label>
             <input 
               type="number" 
               id="category_id" 
@@ -277,13 +277,13 @@
               formControlName="category_id"
               [class.form-input--error]="productForm.get('category_id')?.invalid && productForm.get('category_id')?.touched">
             <div class="form-error" *ngIf="productForm.get('category_id')?.invalid && productForm.get('category_id')?.touched">
-              Category ID is required
+              {{ 'categoryIdRequired' | translate }}
             </div>
           </div>
         </div>
         
         <div class="form-group">
-          <label for="image_url" class="form-label">Image URL</label>
+          <label for="image_url" class="form-label">{{ 'imageUrl' | translate }}</label>
           <input 
             type="text" 
             id="image_url" 
@@ -291,12 +291,12 @@
             formControlName="image_url"
             [class.form-input--error]="productForm.get('image_url')?.invalid && productForm.get('image_url')?.touched">
           <div class="form-error" *ngIf="productForm.get('image_url')?.invalid && productForm.get('image_url')?.touched">
-            Image URL is required
+            {{ 'imageUrlRequired' | translate }}
           </div>
         </div>
         
         <div class="form-group">
-          <label for="slug" class="form-label">Slug</label>
+          <label for="slug" class="form-label">{{ 'slug' | translate }}</label>
           <input 
             type="text" 
             id="slug" 
@@ -304,12 +304,12 @@
             formControlName="slug"
             [class.form-input--error]="productForm.get('slug')?.invalid && productForm.get('slug')?.touched">
           <div class="form-error" *ngIf="productForm.get('slug')?.invalid && productForm.get('slug')?.touched">
-            Slug is required
+            {{ 'slugRequired' | translate }}
           </div>
         </div>
         
         <div class="form-group">
-          <label for="description" class="form-label">Description</label>
+          <label for="description" class="form-label">{{ 'description' | translate }}</label>
           <textarea 
             id="description" 
             class="form-textarea" 
@@ -318,10 +318,10 @@
         </div>
         
         <div class="modal__footer">
-          <button type="button" class="modal__btn modal__btn--secondary" (click)="closeModal()">Cancel</button>
+          <button type="button" class="modal__btn modal__btn--secondary" (click)="closeModal()">{{ 'cancel' | translate }}</button>
           <button type="submit" class="modal__btn modal__btn--primary" [disabled]="isLoading">
-            <span *ngIf="isLoading">Saving...</span>
-            <span *ngIf="!isLoading">{{ isEditing ? 'Update Product' : 'Add Product' }}</span>
+            <span *ngIf="isLoading">{{ 'saving' | translate }}...</span>
+            <span *ngIf="!isLoading">{{ isEditing ? ('updateProduct' | translate) : ('addProduct' | translate) }}</span>
           </button>
         </div>
       </form>
@@ -334,7 +334,7 @@
   <div class="modal__backdrop" (click)="closeDeleteConfirm()"></div>
   <div class="modal__content modal__content--sm">
     <div class="modal__header">
-      <h2 class="modal__title">Confirm Delete</h2>
+      <h2 class="modal__title">{{ 'confirmDelete' | translate }}</h2>
       <button class="modal__close" (click)="closeDeleteConfirm()">
         <i class="fa fa-times"></i>
       </button>
@@ -346,17 +346,17 @@
           <i class="fa fa-exclamation-triangle"></i>
         </div>
         <p class="delete-confirm__text">
-          Are you sure you want to delete the product <strong>{{ selectedProduct?.product_name }}</strong>?
-          This action cannot be undone.
+          {{ 'confirmDeleteProduct' | translate }} <strong>{{ selectedProduct?.product_name }}</strong>?
+          {{ 'actionCannotBeUndone' | translate }}
         </p>
       </div>
     </div>
     
     <div class="modal__footer">
-      <button type="button" class="modal__btn modal__btn--secondary" (click)="closeDeleteConfirm()">Cancel</button>
+      <button type="button" class="modal__btn modal__btn--secondary" (click)="closeDeleteConfirm()">{{ 'cancel' | translate }}</button>
       <button type="button" class="modal__btn modal__btn--danger" (click)="deleteProduct()" [disabled]="isLoading">
-        <span *ngIf="isLoading">Deleting...</span>
-        <span *ngIf="!isLoading">Delete Product</span>
+        <span *ngIf="isLoading">{{ 'deleting' | translate }}...</span>
+        <span *ngIf="!isLoading">{{ 'deleteProduct' | translate }}</span>
       </button>
     </div>
   </div>

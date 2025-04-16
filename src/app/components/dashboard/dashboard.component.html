@@ -12,7 +12,7 @@
             <span class="dashboard__nav-icon">
               <i class="fa fa-home"></i>
             </span>
-            <span class="dashboard__nav-text">Dashboard</span>
+            <span class="dashboard__nav-text">{{ 'dashboard' | translate }}</span>
           </a>
         </li>
         <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'categories'}">
@@ -20,7 +20,7 @@
             <span class="dashboard__nav-icon">
               <i class="fa fa-list"></i>
             </span>
-            <span class="dashboard__nav-text">Categories</span>
+            <span class="dashboard__nav-text">{{ 'categories' | translate }}</span>
           </a>
         </li>
         <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'products'}">
@@ -28,7 +28,7 @@
             <span class="dashboard__nav-icon">
               <i class="fa fa-shopping-cart"></i>
             </span>
-            <span class="dashboard__nav-text">Products</span>
+            <span class="dashboard__nav-text">{{ 'products' | translate }}</span>
           </a>
         </li>
         <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'orders'}">
@@ -36,7 +36,7 @@
             <span class="dashboard__nav-icon">
               <i class="fa fa-shopping-bag"></i>
             </span>
-            <span class="dashboard__nav-text">Orders</span>
+            <span class="dashboard__nav-text">{{ 'orders' | translate }}</span>
           </a>
         </li>
         <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'customers'}">
@@ -44,7 +44,7 @@
             <span class="dashboard__nav-icon">
               <i class="fa fa-users"></i>
             </span>
-            <span class="dashboard__nav-text">Customers</span>
+            <span class="dashboard__nav-text">{{ 'customers' | translate }}</span>
           </a>
         </li>
         <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'settings'}">
@@ -52,7 +52,7 @@
             <span class="dashboard__nav-icon">
               <i class="fa fa-cog"></i>
             </span>
-            <span class="dashboard__nav-text">Settings</span>
+            <span class="dashboard__nav-text">{{ 'settings' | translate }}</span>
           </a>
         </li>
       </ul>
@@ -64,7 +64,7 @@
       </div>
       <div class="dashboard__user-info">
         <h4 class="dashboard__user-name">John Doe</h4>
-        <p class="dashboard__user-role">Administrator</p>
+        <p class="dashboard__user-role">{{ 'administrator' | translate }}</p>
       </div>
     </div>
   </aside>
@@ -74,7 +74,7 @@
     <!-- Header -->
     <header class="dashboard__header">
       <div class="dashboard__search">
-        <!-- <input type="text" class="dashboard__search-input" placeholder="Search..."> -->
+        <!-- <input type="text" class="dashboard__search-input" placeholder="{{ 'search' | translate }}..."> -->
         <!-- <button class="dashboard__search-btn"> -->
           <!-- <i class="fa fa-search"></i> -->
         <!-- </button> -->
@@ -108,8 +108,15 @@
             <i class="fa {{ card.icon }}"></i>
           </div>
           <div class="dashboard__card-content">
-            <h3 class="dashboard__card-title">{{ card.title }}</h3>
-            <p class="dashboard__card-value">{{ card.value }}</p>
+            <h3 class="dashboard__card-title">
+              <ng-container *ngIf="card.title === 'cardTotalOrders'">{{ 'totalOrders' | translate }}</ng-container>
+              <ng-container *ngIf="card.title === 'cardTotalRevenue'">{{ 'totalRevenue' | translate }}</ng-container>
+              <ng-container *ngIf="card.title === 'completed'">{{ 'completed' | translate }}</ng-container>
+              <ng-container *ngIf="card.title === 'pending'">{{ 'pending' | translate }}</ng-container>
+            </h3>
+            <p class="dashboard__card-value">
+              <ng-container *ngIf="card.title === 'cardTotalRevenue'">{{ currencySymbol }} </ng-container>{{ card.value }}
+            </p>
             <p class="dashboard__card-change" 
                [ngClass]="{'dashboard__card-change--up': card.change > 0, 'dashboard__card-change--down': card.change < 0}">
               <i class="fa" [ngClass]="card.change > 0 ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
@@ -124,23 +131,23 @@
         <!-- Revenue Chart -->
         <section class="dashboard__chart-container">
           <div class="dashboard__chart-header">
-            <h2 class="dashboard__chart-title">Tổng quan Doanh thu</h2>
+            <h2 class="dashboard__chart-title">{{ 'totalRevenue' | translate }}</h2>
             <div class="dashboard__chart-actions">
               <button class="dashboard__chart-btn" 
                       [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'week'}"
-                      (click)="changePeriod('week')">Tuần</button>
+                      (click)="changePeriod('week')">{{ 'week' | translate }}</button>
               <button class="dashboard__chart-btn" 
                       [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'month'}"
-                      (click)="changePeriod('month')">Tháng</button>
+                      (click)="changePeriod('month')">{{ 'month' | translate }}</button>
               <button class="dashboard__chart-btn" 
                       [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'year'}"
-                      (click)="changePeriod('year')">Năm</button>
+                      (click)="changePeriod('year')">{{ 'year' | translate }}</button>
             </div>
           </div>
           <div class="dashboard__chart">
             <!-- Chart will be rendered here by a chart library -->
             <div class="dashboard__chart-placeholder" *ngIf="!chartData">
-              Loading chart data...
+              {{ 'loadingChartData' | translate }}
             </div>
             <app-chart *ngIf="chartData" [chartData]="chartData" [chartType]="'line'"></app-chart>
           </div>
@@ -149,20 +156,20 @@
         <!-- Recent Orders -->
         <section class="dashboard__table-container">
           <div class="dashboard__table-header">
-            <h2 class="dashboard__table-title">Đơn hàng gần đây</h2>
+            <h2 class="dashboard__table-title">{{ 'recentOrders' | translate }}</h2>
             <button class="dashboard__table-btn" (click)="changeTab('orders')">
-              Xem tất cả <i class="fa fa-arrow-right"></i>
+              {{ 'viewAll' | translate }} <i class="fa fa-arrow-right"></i>
             </button>
           </div>
           <div class="dashboard__table-wrapper">
             <table class="dashboard__table">
               <thead class="dashboard__table-head">
                 <tr>
-                  <th class="dashboard__table-heading">Mã đơn hàng</th>
-                  <th class="dashboard__table-heading">Khách hàng</th>
-                  <th class="dashboard__table-heading">Ngày đặt</th>
-                  <th class="dashboard__table-heading">Tổng tiền</th>
-                  <th class="dashboard__table-heading">Trạng thái</th>
+                  <th class="dashboard__table-heading">{{ 'id' | translate }}</th>
+                  <th class="dashboard__table-heading">{{ 'customer' | translate }}</th>
+                  <th class="dashboard__table-heading">{{ 'date' | translate }}</th>
+                  <th class="dashboard__table-heading">{{ 'amount' | translate }}</th>
+                  <th class="dashboard__table-heading">{{ 'status' | translate }}</th>
                 </tr>
               </thead>
               <tbody class="dashboard__table-body">
@@ -170,7 +177,7 @@
                   <td class="dashboard__table-cell">{{ order.id }}</td>
                   <td class="dashboard__table-cell">{{ order.customer }}</td>
                   <td class="dashboard__table-cell">{{ order.date }}</td>
-                  <td class="dashboard__table-cell">{{ order.amount }}</td>
+                  <td class="dashboard__table-cell">{{ currencySymbol }} {{ order.amount }}</td>
                   <td class="dashboard__table-cell">
                     <span class="dashboard__badge" 
                           [ngClass]="{
@@ -178,13 +185,13 @@
                             'dashboard__badge--pending': order.status === 1,
                             'dashboard__badge--cancelled': order.status === 0
                           }">
-                      {{ order.status === 0 ? 'Thất bại/Hủy' : order.status === 1 ? 'Đang chờ' : 'Thành công' }}
+                      {{ order.status === 0 ? ('failed' | translate) : order.status === 1 ? ('pending' | translate) : ('completed' | translate) }}
                     </span>
                   </td>
                 </tr>
                 <tr *ngIf="recentOrders.length === 0" class="dashboard__table-row">
                   <td class="dashboard__table-cell" colspan="5" style="text-align: center;">
-                    Không tìm thấy đơn hàng nào
+                    {{ 'noOrdersFoundDashboard' | translate }}
                   </td>
                 </tr>
               </tbody>

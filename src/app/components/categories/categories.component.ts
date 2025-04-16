@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CategoryService } from '../../services/category.service';
 import { Category } from '../../types/category';
+import { TranslatePipe } from '../../pipes/translate.pipe';
+import { TranslationService } from '../../services/translation.service';
 
 interface CategoryViewModel extends Category {
   products: number;
@@ -13,7 +15,7 @@ interface CategoryViewModel extends Category {
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TranslatePipe],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
@@ -39,7 +41,10 @@ export class CategoriesComponent implements OnInit {
     createdAt: ''
   };
 
-  constructor(private categoryService: CategoryService) { }
+  constructor(
+    private categoryService: CategoryService,
+    private translationService: TranslationService
+  ) { }
 
   ngOnInit(): void {
     this.loadCategories();

@@ -10,11 +10,11 @@
 
   <div class="categories__header">
     <div class="categories__title-wrapper">
-      <h1 class="categories__title">Categories Management</h1>
-      <p class="categories__subtitle">Manage your product categories</p>
+      <h1 class="categories__title">{{ 'categories' | translate }} {{ 'management' | translate }}</h1>
+      <p class="categories__subtitle">{{ 'manageCategoriesDescription' | translate }}</p>
     </div>
     <button class="categories__btn categories__btn--primary" (click)="openAddModal()">
-      <i class="fa fa-plus"></i> Add New Category
+      <i class="fa fa-plus"></i> {{ 'add' | translate }} {{ 'new' | translate }} {{ 'category' | translate }}
     </button>
   </div>
 
@@ -23,7 +23,7 @@
       <input 
         type="text" 
         class="categories__search-input" 
-        placeholder="Search categories..." 
+        placeholder="{{ 'searchCategories' | translate }}..." 
         [(ngModel)]="searchQuery"
         (input)="searchCategories()">
       <button class="categories__search-btn">
@@ -32,9 +32,9 @@
     </div>
     <div class="categories__filter">
       <select class="categories__filter-select">
-        <option value="all">All Categories</option>
-        <option value="active">Active Only</option>
-        <option value="inactive">Inactive Only</option>
+        <option value="all">{{ 'allCategories' | translate }}</option>
+        <option value="active">{{ 'activeOnly' | translate }}</option>
+        <option value="inactive">{{ 'inactiveOnly' | translate }}</option>
       </select>
     </div>
   </div>
@@ -43,13 +43,13 @@
     <table class="categories__table">
       <thead class="categories__table-head">
         <tr>
-          <th class="categories__table-heading">ID</th>
-          <th class="categories__table-heading">Category Name</th>
-          <th class="categories__table-heading">Description</th>
-          <th class="categories__table-heading">Products</th>
-          <th class="categories__table-heading">Status</th>
-          <th class="categories__table-heading">Created Date</th>
-          <th class="categories__table-heading">Actions</th>
+          <th class="categories__table-heading">{{ 'id' | translate }}</th>
+          <th class="categories__table-heading">{{ 'categoryName' | translate }}</th>
+          <th class="categories__table-heading">{{ 'description' | translate }}</th>
+          <th class="categories__table-heading">{{ 'products' | translate }}</th>
+          <th class="categories__table-heading">{{ 'status' | translate }}</th>
+          <th class="categories__table-heading">{{ 'createdDate' | translate }}</th>
+          <th class="categories__table-heading">{{ 'actions' | translate }}</th>
         </tr>
       </thead>
       <tbody class="categories__table-body">
@@ -63,7 +63,7 @@
               class="categories__badge" 
               [ngClass]="{'categories__badge--active': category.status_text === 'active', 'categories__badge--inactive': category.status_text === 'inactive'}"
               (click)="toggleStatus(category)">
-              {{ category.status_text | titlecase }}
+              {{ category.status_text === 'active' ? ('active' | translate) : ('inactive' | translate) }}
             </span>
           </td>
           <td class="categories__table-cell">{{ category.createdAt }}</td>
@@ -78,7 +78,7 @@
         </tr>
         <tr *ngIf="filteredCategories.length === 0" class="categories__table-row">
           <td class="categories__table-cell" colspan="7" style="text-align: center;">
-            No categories found
+            {{ 'noCategoriesFound' | translate }}
           </td>
         </tr>
       </tbody>
@@ -88,10 +88,10 @@
   <!-- Simple Form for Add/Edit (in a real app this would be a modal dialog) -->
   <div class="categories__form-container" *ngIf="isFormVisible" (click)="resetForm()">
     <div class="categories__form" (click)="$event.stopPropagation()">
-      <h2 class="categories__form-title">{{ isEditMode ? 'Edit Category' : 'Add New Category' }}</h2>
+      <h2 class="categories__form-title">{{ isEditMode ? ('edit' | translate) + ' ' + ('category' | translate) : ('add' | translate) + ' ' + ('new' | translate) + ' ' + ('category' | translate) }}</h2>
       
       <div class="categories__form-group">
-        <label class="categories__form-label">Category Name</label>
+        <label class="categories__form-label">{{ 'categoryName' | translate }}</label>
         <input 
           type="text" 
           class="categories__form-input" 
@@ -101,28 +101,28 @@
       </div>
       
       <div class="categories__form-group">
-        <label class="categories__form-label">Slug</label>
+        <label class="categories__form-label">{{ 'slug' | translate }}</label>
         <input type="text" class="categories__form-input" [(ngModel)]="categoryForm.slug" required>
-        <small class="categories__form-help">URL-friendly version of the name. Use lowercase letters, numbers, and hyphens only.</small>
+        <small class="categories__form-help">{{ 'slugDescription' | translate }}</small>
       </div>
       
       <div class="categories__form-group">
-        <label class="categories__form-label">Description</label>
+        <label class="categories__form-label">{{ 'description' | translate }}</label>
         <textarea class="categories__form-textarea" [(ngModel)]="categoryForm.description" rows="3"></textarea>
       </div>
       
       <div class="categories__form-group">
-        <label class="categories__form-label">Status</label>
+        <label class="categories__form-label">{{ 'status' | translate }}</label>
         <select class="categories__form-select" [(ngModel)]="categoryForm.status_text">
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
+          <option value="active">{{ 'active' | translate }}</option>
+          <option value="inactive">{{ 'inactive' | translate }}</option>
         </select>
       </div>
       
       <div class="categories__form-actions">
-        <button class="categories__btn categories__btn--secondary" (click)="resetForm()">Cancel</button>
+        <button class="categories__btn categories__btn--secondary" (click)="resetForm()">{{ 'cancel' | translate }}</button>
         <button class="categories__btn categories__btn--primary" (click)="saveCategory()">
-          {{ isEditMode ? 'Update' : 'Save' }}
+          {{ isEditMode ? ('update' | translate) : ('save' | translate) }}
         </button>
       </div>
     </div>
