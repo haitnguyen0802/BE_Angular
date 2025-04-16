@@ -8,6 +8,7 @@ import { ProductsComponent } from '../products/products.component';
 import { CategoriesComponent } from '../categories/categories.component';
 import { CustomersComponent } from '../customers/customers.component';
 import { OrdersComponent } from '../orders/orders.component';
+import { SettingsComponent } from '../settings/settings.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,7 +21,8 @@ import { OrdersComponent } from '../orders/orders.component';
     ProductsComponent, 
     CategoriesComponent,
     CustomersComponent,
-    OrdersComponent
+    OrdersComponent,
+    SettingsComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']

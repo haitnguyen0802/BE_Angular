@@ -47,8 +47,8 @@
             <span class="dashboard__nav-text">Customers</span>
           </a>
         </li>
-        <li class="dashboard__nav-item">
-          <a href="#" class="dashboard__nav-link">
+        <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'settings'}">
+          <a (click)="changeTab('settings')" class="dashboard__nav-link">
             <span class="dashboard__nav-icon">
               <i class="fa fa-cog"></i>
             </span>
@@ -124,17 +124,17 @@
         <!-- Revenue Chart -->
         <section class="dashboard__chart-container">
           <div class="dashboard__chart-header">
-            <h2 class="dashboard__chart-title">Revenue Overview</h2>
+            <h2 class="dashboard__chart-title">Tổng quan Doanh thu</h2>
             <div class="dashboard__chart-actions">
               <button class="dashboard__chart-btn" 
                       [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'week'}"
-                      (click)="changePeriod('week')">Week</button>
+                      (click)="changePeriod('week')">Tuần</button>
               <button class="dashboard__chart-btn" 
                       [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'month'}"
-                      (click)="changePeriod('month')">Month</button>
+                      (click)="changePeriod('month')">Tháng</button>
               <button class="dashboard__chart-btn" 
                       [ngClass]="{'dashboard__chart-btn--active': selectedPeriod === 'year'}"
-                      (click)="changePeriod('year')">Year</button>
+                      (click)="changePeriod('year')">Năm</button>
             </div>
           </div>
           <div class="dashboard__chart">
@@ -149,20 +149,20 @@
         <!-- Recent Orders -->
         <section class="dashboard__table-container">
           <div class="dashboard__table-header">
-            <h2 class="dashboard__table-title">Recent Orders</h2>
+            <h2 class="dashboard__table-title">Đơn hàng gần đây</h2>
             <button class="dashboard__table-btn" (click)="changeTab('orders')">
-              View All <i class="fa fa-arrow-right"></i>
+              Xem tất cả <i class="fa fa-arrow-right"></i>
             </button>
           </div>
           <div class="dashboard__table-wrapper">
             <table class="dashboard__table">
               <thead class="dashboard__table-head">
                 <tr>
-                  <th class="dashboard__table-heading">Order ID</th>
-                  <th class="dashboard__table-heading">Customer</th>
-                  <th class="dashboard__table-heading">Date</th>
-                  <th class="dashboard__table-heading">Amount</th>
-                  <th class="dashboard__table-heading">Status</th>
+                  <th class="dashboard__table-heading">Mã đơn hàng</th>
+                  <th class="dashboard__table-heading">Khách hàng</th>
+                  <th class="dashboard__table-heading">Ngày đặt</th>
+                  <th class="dashboard__table-heading">Tổng tiền</th>
+                  <th class="dashboard__table-heading">Trạng thái</th>
                 </tr>
               </thead>
               <tbody class="dashboard__table-body">
@@ -184,7 +184,7 @@
                 </tr>
                 <tr *ngIf="recentOrders.length === 0" class="dashboard__table-row">
                   <td class="dashboard__table-cell" colspan="5" style="text-align: center;">
-                    No recent orders found
+                    Không tìm thấy đơn hàng nào
                   </td>
                 </tr>
               </tbody>
@@ -212,6 +212,11 @@
     <!-- Orders Tab -->
     <div *ngIf="activeTab === 'orders'">
       <app-orders></app-orders>
+    </div>
+    
+    <!-- Settings Tab -->
+    <div *ngIf="activeTab === 'settings'">
+      <app-settings></app-settings>
     </div>
   </main>
 </div>

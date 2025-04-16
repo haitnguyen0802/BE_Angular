@@ -1,0 +1,158 @@
+<div class="settings-container">
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h5><i class="fa fa-cog"></i> Cài đặt hệ thống</h5>
+    </div>
+    <div class="card-body">
+      <!-- Notification Banner -->
+      <div *ngIf="showNotification" class="notification" [ngClass]="notificationType">
+        <span>{{ notificationMessage }}</span>
+        <button (click)="showNotification = false">&times;</button>
+      </div>
+      
+      <!-- Loading Spinner -->
+      <div *ngIf="isLoading" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+        <p class="mt-2">Đang tải cài đặt...</p>
+      </div>
+
+      <!-- Settings Form -->
+      <div *ngIf="!isLoading" class="settings-form">
+        <!-- Tabs Navigation -->
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'general'" (click)="setActiveTab('general')">
+              <i class="fa fa-globe"></i> Cài đặt chung
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'appearance'" (click)="setActiveTab('appearance')">
+              <i class="fa fa-paint-brush"></i> Giao diện
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [class.active]="activeTab === 'admin'" (click)="setActiveTab('admin')">
+              <i class="fa fa-user-shield"></i> Quản trị
+            </a>
+          </li>
+        </ul>
+        
+        <!-- Form -->
+        <form [formGroup]="settingsForm" (ngSubmit)="saveSettings()">
+          <!-- Tab Contents -->
+          <div class="tab-content">
+            <!-- General Settings Tab -->
+            <div class="tab-pane" [class.active]="activeTab === 'general'">
+              <div class="section-title">Cài đặt ngôn ngữ</div>
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Ngôn ngữ hệ thống</label>
+                <div class="col-sm-9">
+                  <select class="form-control" formControlName="language">
+                    <option *ngFor="let lang of languages" [value]="lang.value">
+                      {{ lang.label }}
+                    </option>
+                  </select>
+                  <small class="form-text text-muted">Chọn ngôn ngữ hiển thị cho ứng dụng</small>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Appearance Settings Tab -->
+            <div class="tab-pane" [class.active]="activeTab === 'appearance'">
+              <div class="section-title">Tùy chỉnh giao diện</div>
+              
+              <!-- Theme options container -->
+              <div class="theme-options-container">
+                <!-- Theme Mode Option -->
+                <div class="theme-option">
+                  <h3>Chế độ nền</h3>
+                  <div class="form-group">
+                    <select class="form-control" formControlName="themeMode">
+                      <option value="light">Sáng (Light)</option>
+                      <option value="dark">Tối (Dark)</option>
+                      <option value="auto">Tự động (Auto)</option>
+                    </select>
+                    <small class="form-text text-muted">
+                      Chế độ tự động sẽ chuyển sang chế độ tối từ 18:00 đến 6:00 sáng
+                    </small>
+                  </div>
+                </div>
+                
+                <!-- Theme Color Option -->
+                <div class="theme-option">
+                  <h3>Màu sắc chủ đạo</h3>
+                  <div class="color-options">
+                    <div class="color-option" *ngFor="let color of themeColors">
+                      <div class="form-check">
+                        <input 
+                          class="form-check-input" 
+                          type="radio" 
+                          [id]="'color-' + color.value"
+                          [value]="color.value" 
+                          formControlName="themeColor">
+                        <label class="form-check-label" [for]="'color-' + color.value">
+                          <div class="color-sample color-{{ color.value }}"></div>
+                          {{ color.label }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Theme Preview Panel -->
+              <div class="card theme-preview-card">
+                <div class="card-header">
+                  <h6 class="mb-0">Xem trước</h6>
+                </div>
+                <div class="card-body theme-preview" 
+                    [ngClass]="{'dark': previewMode === 'dark', 'light': previewMode === 'light', 'blue': previewColor === 'blue', 'black': previewColor === 'black', 'white': previewColor === 'white'}">
+                  <div class="preview-header"></div>
+                  <div class="preview-sidebar"></div>
+                  <div class="preview-content">
+                    <div class="preview-card"></div>
+                    <div class="preview-card"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Admin Settings Tab -->
+            <div class="tab-pane" [class.active]="activeTab === 'admin'">
+              <div class="section-title">Cài đặt quản trị</div>
+              <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Email quản trị viên</label>
+                <div class="col-sm-9">
+                  <input type="email" class="form-control" formControlName="adminEmail" placeholder="admin@example.com">
+                  <small class="form-text text-muted">
+                    Email này sẽ nhận các thông báo hệ thống quan trọng (Có thể để trống)
+                  </small>
+                  <div *ngIf="isFieldInvalid('adminEmail')" class="invalid-feedback d-block">
+                    Vui lòng nhập đúng định dạng email
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Form Actions -->
+          <div class="mt-4 border-top pt-3 form-actions">
+            <button type="button" class="btn btn-outline-danger" (click)="resetToDefaults()">
+              <i class="fa fa-refresh me-1"></i> Khôi phục mặc định
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="settingsForm.invalid || isSaving">
+              <i class="fa fa-save me-1"></i> 
+              <span *ngIf="isSaving">
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Đang lưu...
+              </span>
+              <span *ngIf="!isSaving">Lưu cài đặt</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div> 
