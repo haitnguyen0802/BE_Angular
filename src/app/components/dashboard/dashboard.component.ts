@@ -5,11 +5,12 @@ import { DashboardService, CardData, Order, ChartData } from '../../services/das
 import { ChartComponent } from '../chart/chart.component';
 import { FormsModule } from '@angular/forms';
 import { ProductsComponent } from '../products/products.component';
+import { CategoriesComponent } from '../categories/categories.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, ChartComponent, FormsModule, ProductsComponent],
+  imports: [CommonModule, RouterModule, ChartComponent, FormsModule, ProductsComponent, CategoriesComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

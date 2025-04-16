@@ -22,6 +22,45 @@
     <p class="products__subtitle">Manage your product catalog</p>
   </div>
   
+  <!-- Sorting options -->
+  <div class="products__sort">
+    <span class="products__sort-label">Sort by:</span>
+    <div class="products__sort-options">
+      <button 
+        class="products__sort-btn" 
+        [class.products__sort-btn--active]="sortField === 'product_name'"
+        (click)="changeSort('product_name')">
+        Name 
+        <i *ngIf="sortField === 'product_name'" class="fa" 
+           [ngClass]="sortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+      </button>
+      <button 
+        class="products__sort-btn" 
+        [class.products__sort-btn--active]="sortField === 'price'"
+        (click)="changeSort('price')">
+        Price 
+        <i *ngIf="sortField === 'price'" class="fa" 
+           [ngClass]="sortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+      </button>
+      <button 
+        class="products__sort-btn" 
+        [class.products__sort-btn--active]="sortField === 'product_code'"
+        (click)="changeSort('product_code')">
+        Code 
+        <i *ngIf="sortField === 'product_code'" class="fa" 
+           [ngClass]="sortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+      </button>
+      <button 
+        class="products__sort-btn" 
+        [class.products__sort-btn--active]="sortField === 'status'"
+        (click)="changeSort('status')">
+        Status 
+        <i *ngIf="sortField === 'status'" class="fa" 
+           [ngClass]="sortDirection === 'asc' ? 'fa-arrow-up' : 'fa-arrow-down'"></i>
+      </button>
+    </div>
+  </div>
+  
   <!-- Loading Indicator -->
   <div class="products__loading" *ngIf="isLoading">
     <div class="products__loading-spinner"></div>
@@ -52,6 +91,56 @@
           <i class="fa fa-trash"></i> Delete
         </button>
       </div>
+    </div>
+  </div>
+  
+  <!-- Pagination controls -->
+  <div class="products__pagination" *ngIf="!isLoading && totalPages > 0">
+    <button 
+      class="products__pagination-btn products__pagination-btn--prev" 
+      [disabled]="currentPage === 1"
+      (click)="goToPage(currentPage - 1)">
+      <i class="fa fa-chevron-left"></i> Previous
+    </button>
+    
+    <div class="products__pagination-pages">
+      <button 
+        *ngIf="currentPage > 3 && totalPages > 5" 
+        class="products__pagination-btn products__pagination-btn--page"
+        (click)="goToPage(1)">
+        1
+      </button>
+      
+      <span *ngIf="currentPage > 3 && totalPages > 5" class="products__pagination-ellipsis">...</span>
+      
+      <button 
+        *ngFor="let page of getPageNumbers()" 
+        class="products__pagination-btn products__pagination-btn--page"
+        [class.products__pagination-btn--active]="page === currentPage"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+      
+      <span *ngIf="currentPage < totalPages - 2 && totalPages > 5" class="products__pagination-ellipsis">...</span>
+      
+      <button 
+        *ngIf="currentPage < totalPages - 2 && totalPages > 5" 
+        class="products__pagination-btn products__pagination-btn--page"
+        (click)="goToPage(totalPages)">
+        {{ totalPages }}
+      </button>
+    </div>
+    
+    <button 
+      class="products__pagination-btn products__pagination-btn--next" 
+      [disabled]="currentPage === totalPages"
+      (click)="goToPage(currentPage + 1)">
+      Next <i class="fa fa-chevron-right"></i>
+    </button>
+    
+    <div class="products__pagination-info">
+      Page {{ currentPage }} of {{ totalPages }} 
+      ({{ products.length }} products total)
     </div>
   </div>
   

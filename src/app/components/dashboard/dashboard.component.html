@@ -16,7 +16,7 @@
           </a>
         </li>
         <li class="dashboard__nav-item" [ngClass]="{'dashboard__nav-item--active': activeTab === 'categories'}">
-          <a routerLink="/categories" class="dashboard__nav-link">
+          <a (click)="changeTab('categories')" class="dashboard__nav-link">
             <span class="dashboard__nav-icon">
               <i class="fa fa-list"></i>
             </span>
@@ -197,6 +197,11 @@
     <!-- Products Tab -->
     <div *ngIf="activeTab === 'products'">
       <app-products></app-products>
+    </div>
+
+    <!-- Categories Tab -->
+    <div *ngIf="activeTab === 'categories'">
+      <app-categories></app-categories>
     </div>
   </main>
 </div>

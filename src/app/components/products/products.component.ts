@@ -24,6 +24,15 @@ export class ProductsComponent implements OnInit {
   searchTerm: string = '';
   filteredProducts: Product[] = [];
   
+  // Pagination properties
+  currentPage: number = 1;
+  pageSize: number = 9;
+  totalPages: number = 0;
+  
+  // Sorting properties
+  sortField: string = 'product_name';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  
   constructor(
     private productService: ProductService,
     private fb: FormBuilder
@@ -52,7 +61,7 @@ export class ProductsComponent implements OnInit {
     this.productService.getProducts().subscribe({
       next: (data) => {
         this.products = data;
-        this.filteredProducts = data;
+        this.applyFilters();
         this.isLoading = false;
       },
       error: (error) => {
@@ -63,16 +72,130 @@ export class ProductsComponent implements OnInit {
   }
 
   searchProducts(): void {
-    if (!this.searchTerm.trim()) {
-      this.filteredProducts = this.products;
-      return;
+    this.currentPage = 1; // Reset to first page when searching
+    this.applyFilters();
+  }
+  
+  // Apply all filters (search, sort) and pagination
+  applyFilters(): void {
+    // First apply search filter
+    let results = this.products;
+    
+    if (this.searchTerm.trim()) {
+      const term = this.searchTerm.toLowerCase();
+      results = results.filter(product => 
+        product.product_name.toLowerCase().includes(term) || 
+        product.product_code.toLowerCase().includes(term)
+      );
     }
     
-    const term = this.searchTerm.toLowerCase();
-    this.filteredProducts = this.products.filter(product => 
-      product.product_name.toLowerCase().includes(term) || 
-      product.product_code.toLowerCase().includes(term)
-    );
+    // Then apply sorting
+    results = this.sortProducts(results);
+    
+    // Calculate total pages
+    this.totalPages = Math.ceil(results.length / this.pageSize);
+    
+    // Ensure current page is valid
+    if (this.currentPage < 1) this.currentPage = 1;
+    if (this.currentPage > this.totalPages) this.currentPage = this.totalPages || 1;
+    
+    // Apply pagination
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    this.filteredProducts = results.slice(startIndex, startIndex + this.pageSize);
+  }
+  
+  // Sort products based on current sort settings
+  sortProducts(products: Product[]): Product[] {
+    return [...products].sort((a, b) => {
+      // Handle numeric sorting for price
+      if (this.sortField === 'price') {
+        const aValue = parseFloat(a.price);
+        const bValue = parseFloat(b.price);
+        return this.sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+      
+      // Handle string sorting for other fields
+      let aValue = '';
+      let bValue = '';
+      
+      switch(this.sortField) {
+        case 'product_name':
+          aValue = a.product_name.toLowerCase();
+          bValue = b.product_name.toLowerCase();
+          break;
+        case 'product_code':
+          aValue = a.product_code.toLowerCase();
+          bValue = b.product_code.toLowerCase();
+          break;
+        case 'material':
+          aValue = a.material.toLowerCase();
+          bValue = b.material.toLowerCase();
+          break;
+        case 'status':
+          aValue = a.status.toLowerCase();
+          bValue = b.status.toLowerCase();
+          break;
+        default:
+          aValue = a.product_name.toLowerCase();
+          bValue = b.product_name.toLowerCase();
+      }
+      
+      if (this.sortDirection === 'asc') {
+        return aValue.localeCompare(bValue);
+      } else {
+        return bValue.localeCompare(aValue);
+      }
+    });
+  }
+  
+  // Change sort field and/or direction
+  changeSort(field: string): void {
+    if (this.sortField === field) {
+      // Toggle direction if clicking the same field
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // Set new field and default to ascending
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+    
+    this.applyFilters();
+  }
+  
+  // Go to a specific page
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
+      this.currentPage = page;
+      this.applyFilters();
+    }
+  }
+  
+  // Get array of page numbers for pagination controls
+  getPageNumbers(): number[] {
+    const pageNumbers = [];
+    const totalPagesToShow = 5; // Show 5 page numbers maximum
+    
+    if (this.totalPages <= totalPagesToShow) {
+      // If we have 5 or fewer pages, show all
+      for (let i = 1; i <= this.totalPages; i++) {
+        pageNumbers.push(i);
+      }
+    } else {
+      // Calculate which page numbers to show
+      let startPage = Math.max(this.currentPage - Math.floor(totalPagesToShow / 2), 1);
+      const endPage = Math.min(startPage + totalPagesToShow - 1, this.totalPages);
+      
+      // Adjust start page if we're near the end
+      if (endPage - startPage + 1 < totalPagesToShow) {
+        startPage = Math.max(endPage - totalPagesToShow + 1, 1);
+      }
+      
+      for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+      }
+    }
+    
+    return pageNumbers;
   }
 
   openAddModal(): void {

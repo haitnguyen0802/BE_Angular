@@ -1,4 +1,5 @@
-<div class="categories">
+<!-- Categories Content -->
+<div class="dashboard__content">
   <div class="categories__header">
     <div class="categories__title-wrapper">
       <h1 class="categories__title">Categories Management</h1>
@@ -46,15 +47,15 @@
       <tbody class="categories__table-body">
         <tr *ngFor="let category of filteredCategories" class="categories__table-row">
           <td class="categories__table-cell">{{ category.id }}</td>
-          <td class="categories__table-cell categories__table-cell--name">{{ category.name }}</td>
+          <td class="categories__table-cell categories__table-cell--name">{{ category.category_name }}</td>
           <td class="categories__table-cell categories__table-cell--description">{{ category.description }}</td>
           <td class="categories__table-cell">{{ category.products }}</td>
           <td class="categories__table-cell">
             <span 
               class="categories__badge" 
-              [ngClass]="{'categories__badge--active': category.status === 'active', 'categories__badge--inactive': category.status === 'inactive'}"
+              [ngClass]="{'categories__badge--active': category.status_text === 'active', 'categories__badge--inactive': category.status_text === 'inactive'}"
               (click)="toggleStatus(category)">
-              {{ category.status | titlecase }}
+              {{ category.status_text | titlecase }}
             </span>
           </td>
           <td class="categories__table-cell">{{ category.createdAt }}</td>
@@ -62,7 +63,7 @@
             <button class="categories__action-btn categories__action-btn--edit" (click)="openEditModal(category)">
               <i class="fa fa-edit"></i>
             </button>
-            <button class="categories__action-btn categories__action-btn--delete" (click)="deleteCategory(category.id)">
+            <button class="categories__action-btn categories__action-btn--delete" (click)="deleteCategory(category.id ?? 0)">
               <i class="fa fa-trash"></i>
             </button>
           </td>
@@ -77,13 +78,13 @@
   </div>
 
   <!-- Simple Form for Add/Edit (in a real app this would be a modal dialog) -->
-  <div class="categories__form-container" *ngIf="isEditMode || categoryForm.id === 0">
-    <div class="categories__form">
+  <div class="categories__form-container" *ngIf="isFormVisible" (click)="resetForm()">
+    <div class="categories__form" (click)="$event.stopPropagation()">
       <h2 class="categories__form-title">{{ isEditMode ? 'Edit Category' : 'Add New Category' }}</h2>
       
       <div class="categories__form-group">
         <label class="categories__form-label">Category Name</label>
-        <input type="text" class="categories__form-input" [(ngModel)]="categoryForm.name" required>
+        <input type="text" class="categories__form-input" [(ngModel)]="categoryForm.category_name" required>
       </div>
       
       <div class="categories__form-group">
@@ -93,7 +94,7 @@
       
       <div class="categories__form-group">
         <label class="categories__form-label">Status</label>
-        <select class="categories__form-select" [(ngModel)]="categoryForm.status">
+        <select class="categories__form-select" [(ngModel)]="categoryForm.status_text">
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
         </select>
