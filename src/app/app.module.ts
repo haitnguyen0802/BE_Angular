@@ -21,6 +21,7 @@ import { OrdersComponent } from './components/orders/orders.component';
 import { CustomersComponent } from './components/customers/customers.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { ChartComponent } from './components/chart/chart.component';
+import { LoginComponent } from './components/login/login.component';
 
 // Services
 import { CategoryService } from './services/category.service';
@@ -30,6 +31,7 @@ import { OrderService } from './services/order.service';
 import { DashboardService } from './services/dashboard.service';
 import { SettingsService } from './services/settings.service';
 import { TranslationService } from './services/translation.service';
+import { AuthService } from './services/auth.service';
 import { addExtraTranslations } from './services/translation-extras';
 
 // Pipes
@@ -57,7 +59,8 @@ import { TranslatePipe } from './pipes/translate.pipe';
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    RouterModule
+    RouterModule,
+    LoginComponent
   ],
   providers: [
     CategoryService,
@@ -66,7 +69,8 @@ import { TranslatePipe } from './pipes/translate.pipe';
     OrderService,
     DashboardService,
     SettingsService,
-    TranslationService
+    TranslationService,
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

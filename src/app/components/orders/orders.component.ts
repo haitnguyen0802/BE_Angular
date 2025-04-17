@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslatePipe } from '../../pipes/translate.pipe';
 import { TranslationService } from '../../services/translation.service';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-orders',
@@ -27,14 +28,14 @@ export class OrdersComponent implements OnInit {
   // Form and modal
   orderForm: FormGroup;
   showModal: boolean = false;
-  modalTitle: string = 'Add New Order';
+  modalTitle: string = '';
   currentOrderId: number | null = null;
   
   // Status options
   statusOptions = [
-    { value: 0, label: 'Thất bại/Hủy' },
-    { value: 1, label: 'Đang chờ' },
-    { value: 2, label: 'Thành công' }
+    { value: 0, label: 'orderStatusFailed' },
+    { value: 1, label: 'orderStatusPending' },
+    { value: 2, label: 'orderStatusCompleted' }
   ];
   
   // Notification
@@ -65,17 +66,18 @@ export class OrdersComponent implements OnInit {
    */
   loadOrders(): void {
     this.loading = true;
-    this.orderService.getOrders().subscribe({
-      next: (data) => {
-        this.orders = data.map(order => this.transformToViewModel(order));
-        this.filteredOrders = [...this.orders];
+    this.orderService.getOrders().pipe(
+      catchError(error => {
         this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading orders:', error);
-        this.showNotificationMessage('Failed to load orders. Please try again later.', 'error');
-        this.loading = false;
-      }
+        this.notificationMessage = this.translationService.get('errorLoadingOrders');
+        this.notificationType = 'error';
+        this.showNotification = true;
+        return throwError(() => new Error(error));
+      })
+    ).subscribe(orders => {
+      this.orders = orders.map(order => this.transformToViewModel(order));
+      this.filteredOrders = [...this.orders];
+      this.loading = false;
     });
   }
 
@@ -120,7 +122,7 @@ export class OrdersComponent implements OnInit {
    * Open modal to add new order
    */
   openAddModal(): void {
-    this.modalTitle = 'Add New Order';
+    this.modalTitle = this.translationService.get('addOrder');
     this.currentOrderId = null;
     this.orderForm.reset({
       customer_name: '',
@@ -136,7 +138,7 @@ export class OrdersComponent implements OnInit {
    * Open modal to edit existing order
    */
   openEditModal(order: OrderViewModel): void {
-    this.modalTitle = 'Edit Order';
+    this.modalTitle = this.translationService.get('editOrder');
     this.currentOrderId = order.id!;
     this.orderForm.patchValue({
       customer_name: order.customer_name,
@@ -173,22 +175,38 @@ export class OrdersComponent implements OnInit {
 
     if (this.currentOrderId) {
       // Update existing order
-      this.orderService.updateOrder(this.currentOrderId, orderData).subscribe({
+      this.orderService.updateOrder(this.currentOrderId, orderData).pipe(
+        catchError(error => {
+          this.processingAction = false;
+          this.notificationMessage = this.translationService.get('errorUpdatingOrder');
+          this.notificationType = 'error';
+          this.showNotification = true;
+          return throwError(() => new Error(error));
+        })
+      ).subscribe({
         next: (updatedOrder) => {
-          this.handleSuccess('Order updated successfully!');
+          this.handleSuccess(this.translationService.get('orderUpdatedSuccess'));
         },
         error: (error) => {
-          this.handleError('Failed to update order:', error);
+          this.handleError(this.translationService.get('generalError'), error);
         }
       });
     } else {
       // Create new order
-      this.orderService.createOrder(orderData).subscribe({
+      this.orderService.createOrder(orderData).pipe(
+        catchError(error => {
+          this.processingAction = false;
+          this.notificationMessage = this.translationService.get('errorCreatingOrder');
+          this.notificationType = 'error';
+          this.showNotification = true;
+          return throwError(() => new Error(error));
+        })
+      ).subscribe({
         next: (newOrder) => {
-          this.handleSuccess('Order created successfully!');
+          this.handleSuccess(this.translationService.get('orderCreatedSuccess'));
         },
         error: (error) => {
-          this.handleError('Failed to create order:', error);
+          this.handleError(this.translationService.get('generalError'), error);
         }
       });
     }
@@ -198,17 +216,25 @@ export class OrdersComponent implements OnInit {
    * Delete order after confirmation
    */
   deleteOrder(order: OrderViewModel): void {
-    if (!confirm(`Are you sure you want to delete order #${order.id}?`)) {
+    if (!confirm(this.translationService.get('confirmDeleteOrder').replace('{id}', order.id!.toString()))) {
       return;
     }
 
     this.processingAction = true;
-    this.orderService.deleteOrder(order.id!).subscribe({
+    this.orderService.deleteOrder(order.id!).pipe(
+      catchError(error => {
+        this.processingAction = false;
+        this.notificationMessage = this.translationService.get('errorDeletingOrder');
+        this.notificationType = 'error';
+        this.showNotification = true;
+        return throwError(() => new Error(error));
+      })
+    ).subscribe({
       next: () => {
-        this.handleSuccess('Order deleted successfully!');
+        this.handleSuccess(this.translationService.get('orderDeletedSuccess'));
       },
       error: (error) => {
-        this.handleError('Failed to delete order:', error);
+        this.handleError(this.translationService.get('generalError'), error);
       }
     });
   }
@@ -242,7 +268,7 @@ export class OrdersComponent implements OnInit {
    */
   private handleError(message: string, error: any): void {
     console.error(message, error);
-    this.showNotificationMessage('An error occurred. Please try again.', 'error');
+    this.showNotificationMessage(this.translationService.get('generalError'), 'error');
     this.processingAction = false;
   }
 } 

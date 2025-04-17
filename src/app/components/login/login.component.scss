@@ -1,0 +1,276 @@
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.login-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.login-left-section {
+  width: 60vw;
+  background: linear-gradient(180deg, #0066cc 0%, #004080 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.intro-content {
+  color: white;
+  text-align: left;
+  max-width: 500px;
+  z-index: 2;
+}
+
+.intro-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.intro-content p {
+  font-size: 1.25rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.btn-read-more {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-read-more:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.wave-decoration {
+  position: absolute;
+  bottom: -80px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23004080" fill-opacity="0.3" d="M0,64L60,90.7C120,117,240,171,360,186.7C480,203,600,181,720,186.7C840,192,960,224,1080,229.3C1200,235,1320,213,1380,202.7L1440,192L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"></path></svg>') no-repeat bottom;
+  background-size: cover;
+  z-index: 1;
+}
+
+.login-right-section {
+  width: 40vw;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 450px;
+  padding: 20px;
+}
+
+.login-form h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+.welcome-text {
+  color: #666;
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-icon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.email-icon::before {
+  content: "✉️";
+}
+
+.password-icon::before {
+  content: "🔒";
+}
+
+.form-control {
+  width: 100%;
+  padding: 15px 15px 15px 45px;
+  border: 1px solid #e6e6e6;
+  border-radius: 30px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.form-control::placeholder {
+  color: #aaa;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+  background-color: #fff;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+  background-color: #fff;
+}
+
+.invalid-feedback {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  margin-left: 15px;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #f5c6cb;
+  font-size: 0.875rem;
+}
+
+.btn-login {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 30px;
+  background-color: #0066cc;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn-login:hover {
+  background-color: #0052a3;
+}
+
+.btn-login:disabled {
+  background-color: #80b3ff;
+  cursor: not-allowed;
+}
+
+.forgot-password {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.forgot-password a {
+  color: #0066cc;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s;
+}
+
+.forgot-password a:hover {
+  color: #0052a3;
+  text-decoration: underline;
+}
+
+.spinner {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .login-container {
+    flex-direction: column;
+  }
+  
+  .login-left-section,
+  .login-right-section {
+    width: 100vw;
+  }
+  
+  .login-left-section {
+    height: 40vh;
+    padding: 30px;
+  }
+  
+  .login-right-section {
+    height: 60vh;
+    padding: 30px 20px;
+  }
+  
+  .intro-content h1 {
+    font-size: 2.5rem;
+  }
+  
+  .intro-content p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .btn-read-more {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .login-form h2 {
+    font-size: 1.8rem;
+  }
+  
+  .welcome-text {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+} 

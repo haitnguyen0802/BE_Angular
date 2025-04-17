@@ -14,6 +14,13 @@ export function addExtraTranslations(translationService: TranslationService): vo
       'inactiveOnly': 'Inactive Only',
       'new': 'New',
       
+      // Login page
+      'loginTitle': 'Login to Dashboard',
+      'loginError': 'Invalid username or password',
+      'usernameRequired': 'Username is required',
+      'passwordRequired': 'Password is required',
+      'loginButton': 'Login',
+      
       // Currency
       'currencySymbol': '$',
       
@@ -197,6 +204,13 @@ export function addExtraTranslations(translationService: TranslationService): vo
       'activeOnly': 'Chỉ đang hoạt động',
       'inactiveOnly': 'Chỉ không hoạt động',
       'new': 'Mới',
+      
+      // Login page
+      'loginTitle': 'Đăng nhập vào Dashboard',
+      'loginError': 'Tên đăng nhập hoặc mật khẩu không đúng',
+      'usernameRequired': 'Tên đăng nhập là bắt buộc',
+      'passwordRequired': 'Mật khẩu là bắt buộc',
+      'loginButton': 'Đăng nhập',
       
       // Currency
       'currencySymbol': '₫',
@@ -383,6 +397,13 @@ export function addExtraTranslations(translationService: TranslationService): vo
       'inactiveOnly': '仅非活动的',
       'new': '新建',
       
+      // Login page
+      'loginTitle': '登录到仪表板',
+      'loginError': '用户名或密码无效',
+      'usernameRequired': '用户名是必需的',
+      'passwordRequired': '密码是必需的',
+      'loginButton': '登录',
+      
       // Currency
       'currencySymbol': '¥',
       
@@ -467,6 +488,13 @@ export function addExtraTranslations(translationService: TranslationService): vo
       'activeOnly': 'アクティブのみ',
       'inactiveOnly': '非アクティブのみ',
       'new': '新規',
+      
+      // Login page
+      'loginTitle': 'ダッシュボードにログイン',
+      'loginError': 'ユーザー名またはパスワードが無効です',
+      'usernameRequired': 'ユーザー名は必須です',
+      'passwordRequired': 'パスワードは必須です',
+      'loginButton': 'ログイン',
       
       // Currency
       'currencySymbol': '¥',

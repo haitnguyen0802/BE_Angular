@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router } from '@angular/router';
 import { TranslationService } from './services/translation.service';
 import { SettingsService } from './services/settings.service';
+import { AuthService } from './services/auth.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +17,9 @@ export class AppComponent implements OnInit {
 
   constructor(
     private translationService: TranslationService,
-    private settingsService: SettingsService
+    private settingsService: SettingsService,
+    private authService: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -26,6 +30,17 @@ export class AppComponent implements OnInit {
     // Subscribe to language changes from settings service
     this.settingsService.settings$.subscribe(settings => {
       this.translationService.setLanguage(settings.language);
+    });
+    
+    // Kiểm tra trạng thái đăng nhập
+    this.authService.currentUser$.pipe(
+      map(user => !!user) // Chuyển đổi user thành boolean
+    ).subscribe(isLoggedIn => {
+      if (!isLoggedIn && this.router.url !== '/login') {
+        this.router.navigate(['/login']);
+      } else if (isLoggedIn && this.router.url === '/login') {
+        this.router.navigate(['/dashboard']);
+      }
     });
   }
 }

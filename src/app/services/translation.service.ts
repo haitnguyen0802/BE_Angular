@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Language } from './settings.service';
+import { loginTranslations } from '../i18n/translation-extras';
 
 // Interface for all translatable text in the application
 export interface TranslationSet {
@@ -375,7 +376,10 @@ export class TranslationService {
   private currentTranslationSubject = new BehaviorSubject<TranslationSet>(this.translations.vi);
   currentTranslation$ = this.currentTranslationSubject.asObservable();
   
-  constructor() {}
+  constructor() {
+    // Add login translations
+    this.addTranslations(loginTranslations);
+  }
   
   /**
    * Set the current language
