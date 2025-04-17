@@ -1,17 +1,17 @@
 <div class="login-container">
   <div class="login-left-section">
     <div class="intro-content">
-      <h1>GoFinance</h1>
-      <p>The most popular peer to peer lending at SEA</p>
-      <button class="btn-read-more">Read More</button>
+      <h1>Thầy Long - WEB2081</h1>
+      <p>Một chữ cũng là Thầy - Nữa chữ cũng là Thầy</p>
+      <a href="https://longnv.name.vn/" class="btn-read-more">Đọc Thêm</a>
       <div class="wave-decoration"></div>
     </div>
   </div>
   
   <div class="login-right-section">
     <div class="login-form">
-      <h2>Hello Again!</h2>
-      <p class="welcome-text">Welcome Back</p>
+      <h2>Đăng Nhập</h2>
+      <p class="welcome-text">Xin Chào</p>
       
       <div *ngIf="error" class="alert alert-danger">
         {{ error }}
@@ -29,7 +29,7 @@
               formControlName="username"
               class="form-control"
               [ngClass]="{ 'is-invalid': submitted && f['username'].errors }"
-              placeholder="Email Address"
+              placeholder="ID/Mail Đăng Nhập"
             />
           </div>
           <div *ngIf="submitted && f['username'].errors" class="invalid-feedback">
@@ -48,7 +48,7 @@
               formControlName="password"
               class="form-control"
               [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
-              placeholder="Password"
+              placeholder="Mật Khẩu"
             />
           </div>
           <div *ngIf="submitted && f['password'].errors" class="invalid-feedback">
@@ -59,13 +59,13 @@
         <div class="form-group">
           <button [disabled]="loading" class="btn-login">
             <span *ngIf="loading" class="spinner"></span>
-            Login
+            Đăng Nhập
           </button>
         </div>
 
-        <div class="forgot-password">
+        <!-- <div class="forgot-password">
           <a href="#">Forgot Password</a>
-        </div>
+        </div> -->
       </form>
     </div>
   </div>
